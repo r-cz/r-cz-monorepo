@@ -21,7 +21,7 @@ interface EducationItemProps {
 
 function EducationItem({ institution, degree, logo, period, description }: EducationItemProps) {
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-row items-center gap-4">
         <div className="w-12 h-12 relative overflow-hidden rounded-md">
           <Image 
