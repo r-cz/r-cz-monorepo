@@ -10,7 +10,7 @@
     "tsconfig.json"
   ],
   "dependencies": {
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "latest"
   },
   "devDependencies": {
     "typescript": "^5.7.3"
