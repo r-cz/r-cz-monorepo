@@ -24,7 +24,7 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center space-x-2 px-2">
-                <span className="inline-block font-bold">Ryan Cruz</span>
+                <span className="inline-block font-bold">Menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">

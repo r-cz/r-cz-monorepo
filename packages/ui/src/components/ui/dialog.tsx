@@ -8,11 +8,16 @@ const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
+// Fixed DialogPortal to use a combined type with className
+type DialogPortalProps = DialogPrimitive.DialogPortalProps & {
+  className?: string
+}
+
 const DialogPortal = ({
   className,
   children,
   ...props
-}: DialogPrimitive.DialogPortalProps) => (
+}: DialogPortalProps) => (
   <DialogPrimitive.Portal {...props}>
     <div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
       {children}

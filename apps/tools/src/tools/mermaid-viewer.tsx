@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import mermaid from "mermaid";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { 
   Card, 
   CardContent, 
@@ -12,6 +12,12 @@ import {
   Button
 } from "@r-cz/ui";
 
+// Import MermaidClient dynamically with ssr disabled
+const MermaidClient = dynamic(
+  () => import('./mermaid-client'),
+  { ssr: false }
+);
+
 export function MermaidViewer() {
   const [code, setCode] = useState(`graph TD
   A[Start] --> B{Is it working?}
@@ -21,29 +27,13 @@ export function MermaidViewer() {
   
   const [diagramType, setDiagramType] = useState("flowchart");
   const [error, setError] = useState<string | null>(null);
-  const diagramRef = useRef<HTMLDivElement>(null);
-
-  const renderDiagram = async () => {
-    if (!diagramRef.current) return;
-    
-    try {
-      setError(null);
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
-        securityLevel: 'strict'
-      });
-      
-      diagramRef.current.innerHTML = '';
-      await mermaid.render('mermaid-diagram', code, (svgCode) => {
-        if (diagramRef.current) {
-          diagramRef.current.innerHTML = svgCode;
-        }
-      });
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'Failed to render diagram');
-    }
+  
+  const handleError = (message: string) => {
+    setError(message);
+  };
+  
+  const renderDiagram = () => {
+    setError(null);
   };
 
   // Set examples based on diagram type
@@ -90,34 +80,11 @@ export function MermaidViewer() {
     }
   };
 
-  // Initialize mermaid and render diagram
-  useEffect(() => {
-    renderDiagram();
-    
-    // Re-render when theme changes
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'class'
-        ) {
-          renderDiagram();
-        }
-      });
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-    
-    return () => {
-      observer.disconnect();
-    };
-  }, [code]);
-
   // Update examples when diagram type changes
   useEffect(() => {
+    // Only run in browser environment
+    if (typeof window === 'undefined') return;
+    
     setExample();
   }, [diagramType]);
 
@@ -164,9 +131,9 @@ export function MermaidViewer() {
                 <pre className="whitespace-pre-wrap">{error}</pre>
               </div>
             ) : (
-              <div 
-                className="min-h-[300px] w-full bg-background rounded-md border border-input p-4 overflow-auto flex items-center justify-center"
-                ref={diagramRef}
+              <MermaidClient 
+                code={code}
+                onError={handleError}
               />
             )}
           </CardContent>
