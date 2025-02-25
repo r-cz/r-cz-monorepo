@@ -1,5 +1,6 @@
-# Domain-based redirects
-/ /main/:splat 200
+# Domain-based routing
+https://ryancruz.com/* /main/:splat 200
+https://tools.ryancruz.com/* /tools/:splat 200
 
-# Handle all paths
-/* /index.html 200
+# Handle root path
+/ /main/ 200
