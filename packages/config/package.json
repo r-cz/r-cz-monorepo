@@ -1,0 +1,23 @@
+{
+  "name": "@r-cz/config",
+  "version": "0.0.1",
+  "private": true,
+  "files": [
+    "eslint-next.js",
+    "tailwind.config.js",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "echo 'No build needed for config package'"
+  },
+  "dependencies": {
+    "eslint-config-next": "^14.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-config-turbo": "^1.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  }
+}
