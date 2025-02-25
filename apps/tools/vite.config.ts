@@ -7,6 +7,9 @@ export default defineConfig({
 
   // Optimize package size by splitting large dependencies into separate chunks
   build: {
+    outDir: 'dist',
+    sourcemap: true,
+    chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
         manualChunks: {

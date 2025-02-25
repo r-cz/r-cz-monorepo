@@ -1,12 +1,24 @@
 # Ryan Cruz Monorepo
 
-This monorepo contains various websites and applications for the ryancruz.com domain:
+This monorepo houses multiple websites and applications under the ryancruz.com domain, providing shared components, configurations, and theme logic.
 
-- `apps/main` - The main personal site (ryancruz.com)
-- `apps/tools` - Developer tools and utilities (tools.ryancruz.com)
-- `packages/ui` - Shared UI components
-- `packages/theme` - Shared theming logic
-- `packages/config` - Shared configurations
+## Sites
+
+- [ryancruz.com](https://ryancruz.com) - Main personal website
+- [tools.ryancruz.com](https://tools.ryancruz.com) - Developer tools and utilities
+
+## Structure
+
+```
+r-cz-monorepo/
+├── apps/                 # Individual applications
+│   ├── main/            # ryancruz.com
+│   └── tools/           # tools.ryancruz.com
+├── packages/             # Shared packages
+│   ├── ui/              # UI components
+│   ├── theme/           # Theme functionality
+│   └── config/          # Shared configurations
+```
 
 ## Development
 
@@ -14,48 +26,25 @@ This monorepo contains various websites and applications for the ryancruz.com do
 # Install dependencies
 bun install
 
-# Start development servers for all applications
+# Start development servers
 bun run dev
 
-# Build all applications
+# Build all sites
 bun run build
 
-# Preview all applications
-bun run preview
-```
+# Lint code
+bun run lint
 
-## Project Structure
-
-```
-r-cz-monorepo/
-├── apps/
-│   ├── main/         (ryancruz.com)
-│   ├── tools/        (tools.ryancruz.com)
-│   └── [future sites]
-├── packages/
-│   ├── ui/           (shared components)
-│   ├── config/       (shared configs)
-│   └── theme/        (shared theme logic)
-├── package.json
-└── turbo.json
+# Format code
+bun run format
 ```
 
 ## Adding a New Site
 
-To add a new site to the monorepo:
-
-1. Create a new directory under `apps/`
-2. Set up the package.json with dependencies on shared packages
-3. Import and use shared components and configurations
+1. Create a new directory in `apps/`
+2. Set up dependencies to use shared packages
+3. Import shared components and configurations
 
 ## Deployment
 
-Each app in the monorepo is deployed via Cloudflare Pages to its respective domain/subdomain.
-
-## Common UI Components
-
-Common UI components are stored in the `packages/ui` directory and imported by apps.
-
-## Shared Configuration
-
-Shared configurations are stored in the `packages/config` directory.
+Each site is automatically deployed to Cloudflare Pages when changes are pushed to the main branch.
