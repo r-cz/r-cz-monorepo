@@ -13,7 +13,7 @@
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.2.0",
     "@r-cz/theme": "workspace:*",
-    "@r-cz/ui": "workspace:*",
+    "@r-cz/shadcn-ui": "workspace:*",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
     "mermaid": "^10.9.3",

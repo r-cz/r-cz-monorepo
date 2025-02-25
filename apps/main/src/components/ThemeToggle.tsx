@@ -1,105 +1,59 @@
-import { useState, useEffect, useRef } from 'react';
-import {
-  SunIcon,
-  MoonIcon,
-  ComputerDesktopIcon,
-} from '@heroicons/react/24/outline';
 import { useTheme } from '@r-cz/theme';
+import { Sun, Moon, Laptop } from 'lucide-react';
+import { 
+  Button,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@r-cz/shadcn-ui';
 
 const ThemeToggle = () => {
-  const [isOpen, setIsOpen] = useState < boolean > (false);
-  const menuRef = useRef < HTMLDivElement > (null);
   const [themeState, setThemeState] = useTheme();
-
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (
-      event: MouseEvent
-    ) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(
-          event.target as Node
-        )
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener(
-      'mousedown',
-      handleClickOutside
-    );
-    return () =>
-      document.removeEventListener(
-        'mousedown',
-        handleClickOutside
-      );
-  }, []);
 
   const setTheme = (
     isDark: boolean,
-    source: 'user' | 'system'
+    source: 'user' | 'system' | 'localStorage'
   ) => {
     setThemeState({
       isDark,
       source,
     });
-    setIsOpen(false);
   };
 
   return (
-    <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 
-           hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-        aria-label="Theme settings"
-      >
-        {themeState.source === 'system' ? (
-          <ComputerDesktopIcon className="w-6 h-6" />
-        ) : themeState.isDark ? (
-          <MoonIcon className="w-6 h-6" />
-        ) : (
-          <SunIcon className="w-6 h-6" />
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
-          <button
-            onClick={() =>
-              setTheme(false, 'user')
-            }
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          >
-            <SunIcon className="w-5 h-5" />
-            Light
-          </button>
-          <button
-            onClick={() => setTheme(true, 'user')}
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          >
-            <MoonIcon className="w-5 h-5" />
-            Dark
-          </button>
-          <button
-            onClick={() =>
-              setTheme(
-                window.matchMedia(
-                  '(prefers-color-scheme: dark)'
-                ).matches,
-                'system'
-              )
-            }
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          >
-            <ComputerDesktopIcon className="w-5 h-5" />
-            System
-          </button>
-        </div>
-      )}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" aria-label="Theme settings">
+          {themeState.source === 'system' ? (
+            <Laptop className="h-[1.2rem] w-[1.2rem]" />
+          ) : themeState.isDark ? (
+            <Moon className="h-[1.2rem] w-[1.2rem]" />
+          ) : (
+            <Sun className="h-[1.2rem] w-[1.2rem]" />
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme(false, 'user')}>
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Light</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme(true, 'user')}>
+          <Moon className="mr-2 h-4 w-4" />
+          <span>Dark</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => setTheme(
+            window.matchMedia('(prefers-color-scheme: dark)').matches,
+            'system'
+          )}
+        >
+          <Laptop className="mr-2 h-4 w-4" />
+          <span>System</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

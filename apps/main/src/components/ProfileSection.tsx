@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import ProgressiveImage from './ProgressiveImage';
+import ProfileDialog from './ProfileDialog';
+import { Avatar, AvatarImage, AvatarFallback } from '@r-cz/shadcn-ui';
 
 interface ProfileImage {
   avif: string;
@@ -41,29 +43,34 @@ const ProfileSection = () => {
     <section className="text-center mb-12">
       <div className="mb-6">
         <div className="w-32 h-32 mx-auto mb-4">
-          <ProgressiveImage
-            avifSrc={profileImage.avif}
-            pngSrc={profileImage.png}
-            alt="Profile"
-            className="w-32 h-32 rounded-full object-cover 
-             border-4 border-primary-500 dark:border-primary-400"
-          />
+          <ProfileDialog>
+            <button className="rounded-full overflow-hidden transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+              <Avatar className="w-32 h-32">
+                <AvatarImage 
+                  src={profileImage.png} 
+                  alt="Profile"
+                  className="object-cover" 
+                />
+                <AvatarFallback className="text-3xl">RC</AvatarFallback>
+              </Avatar>
+            </button>
+          </ProfileDialog>
         </div>
         <h1 className="text-4xl font-bold mb-2">
           Ryan Cruz
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
+        <p className="text-lg text-muted-foreground">
           Identity Engineer
         </p>
       </div>
 
-      <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-400 whitespace-pre-line">
+      <p className="max-w-2xl mx-auto text-muted-foreground whitespace-pre-line">
         {`Cybersecurity Engineer with ${yearsOfExperience} years of experience. Currently building a CIAM solution for `}
         <a
           href="https://www.southwest.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary-600 dark:text-primary-400 hover:underline"
+          className="text-primary hover:underline"
         >
           Southwest Airlines
         </a>
@@ -72,7 +79,7 @@ const ProfileSection = () => {
           href="https://www.google.com/maps/place/Dallas,+TX"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary-600 dark:text-primary-400 hover:underline"
+          className="text-primary hover:underline"
         >
           Dallas, Texas
         </a>

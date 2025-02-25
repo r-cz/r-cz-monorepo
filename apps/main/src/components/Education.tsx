@@ -1,4 +1,5 @@
 import SimpleImage from './SimpleImage';
+import { Card, CardContent } from '@r-cz/shadcn-ui';
 
 interface EducationItem {
     school: string;
@@ -31,37 +32,35 @@ const Education = () => {
             </h2>
             <div className="space-y-6">
                 {education.map((edu, index) => (
-                    <div
-                        key={index}
-                        className="border border-gray-200 dark:border-gray-700 rounded-lg p-6
-             hover:shadow-lg transition-shadow bg-white dark:bg-gray-800"
-                    >
-                        <div className="flex items-center gap-4 mb-4">
-                            <SimpleImage
-                                logoPath={edu.logoPath}
-                                alt={`${edu.school} logo`}
-                                className="w-12 h-12 object-contain"
-                            />
-                            <div>
-                                <h3 className="text-xl font-semibold">
-                                    {edu.school}
-                                </h3>
-                                <p className="text-primary-600 dark:text-primary-400">
-                                    {edu.degree}
-                                </p>
+                    <Card key={index} className="hover:shadow-lg transition-shadow">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4 mb-4">
+                                <SimpleImage
+                                    logoPath={edu.logoPath}
+                                    alt={`${edu.school} logo`}
+                                    className="w-12 h-12 object-contain"
+                                />
+                                <div>
+                                    <h3 className="text-xl font-semibold">
+                                        {edu.school}
+                                    </h3>
+                                    <p className="text-primary">
+                                        {edu.degree}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                            {edu.period}
-                        </p>
-                        <div className="text-gray-600 dark:text-gray-300 space-y-2">
-                            {edu.descriptions?.map(
-                                (desc, descIndex) => (
-                                    <p key={descIndex}>{desc}</p>
-                                )
-                            )}
-                        </div>
-                    </div>
+                            <p className="text-sm text-muted-foreground mb-3">
+                                {edu.period}
+                            </p>
+                            <div className="text-foreground space-y-2">
+                                {edu.descriptions?.map(
+                                    (desc, descIndex) => (
+                                        <p key={descIndex}>{desc}</p>
+                                    )
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
                 ))}
             </div>
         </section>

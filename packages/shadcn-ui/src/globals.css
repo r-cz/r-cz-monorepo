@@ -64,12 +64,12 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.5% 48%;
   }
+}
 
-  /* Custom styles */
-  html {
-    @apply antialiased;
+@layer base {
+  * {
+    @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
