@@ -12,6 +12,7 @@
     "build": "npm run build:main && npm run build:tools",
     "build:main": "cd apps/main && bun run build",
     "build:tools": "cd apps/tools && bun run build",
+    "build:cf": "APP_TO_BUILD=$CF_PAGES_BRANCH bun ./cloudflare-build.js",
     "lint": "turbo lint",
     "preview": "turbo preview",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
