@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { useTheme as useLegacyTheme } from '@r-cz/theme';
-import { Layout, ThemeToggle } from '@r-cz/shadcn-ui';
+import { useTheme } from '@r-cz/theme';
+import { Layout, Footer } from '@r-cz/ui';
 import ProfileSection from './components/ProfileSection';
 import WorkExperience from './components/WorkExperience';
 import Education from './components/Education';
 import HamburgerMenu from './components/HamburgerMenu';
+import { ThemeToggle } from '@r-cz/ui';
 
 function App() {
   useEffect(() => {

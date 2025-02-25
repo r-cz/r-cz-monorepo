@@ -1,10 +1,4 @@
 import React from 'react';
-import { 
-  Card as ShadcnCard, 
-  CardHeader as ShadcnCardHeader, 
-  CardContent as ShadcnCardContent,
-  CardFooter as ShadcnCardFooter
-} from '@r-cz/shadcn-ui';
 
 export interface CardProps {
   children: React.ReactNode;
@@ -12,27 +6,23 @@ export interface CardProps {
   variant?: 'default' | 'bordered' | 'elevated';
 }
 
-// Map variant classes to className props
-const getVariantClass = (variant: CardProps['variant']) => {
-  switch (variant) {
-    case 'bordered':
-      return 'border-gray-200 dark:border-gray-700';
-    case 'elevated':
-      return 'shadow-md';
-    default:
-      return '';
-  }
-};
-
 export const Card: React.FC<CardProps> = ({ 
   children, 
   className = '',
   variant = 'default' 
 }) => {
+  const baseClasses = 'rounded-lg overflow-hidden';
+  
+  const variantClasses = {
+    default: 'bg-white dark:bg-gray-800',
+    bordered: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
+    elevated: 'bg-white dark:bg-gray-800 shadow-md'
+  };
+  
   return (
-    <ShadcnCard className={`${getVariantClass(variant)} ${className}`}>
+    <div className={`${baseClasses} ${variantClasses[variant]} ${className}`}>
       {children}
-    </ShadcnCard>
+    </div>
   );
 };
 
@@ -41,9 +31,9 @@ export const CardHeader: React.FC<{children: React.ReactNode; className?: string
   className = ''
 }) => {
   return (
-    <ShadcnCardHeader className={className}>
+    <div className={`px-4 py-3 border-b border-gray-200 dark:border-gray-700 ${className}`}>
       {children}
-    </ShadcnCardHeader>
+    </div>
   );
 };
 
@@ -52,9 +42,9 @@ export const CardContent: React.FC<{children: React.ReactNode; className?: strin
   className = ''
 }) => {
   return (
-    <ShadcnCardContent className={className}>
+    <div className={`p-4 ${className}`}>
       {children}
-    </ShadcnCardContent>
+    </div>
   );
 };
 
@@ -63,9 +53,9 @@ export const CardFooter: React.FC<{children: React.ReactNode; className?: string
   className = ''
 }) => {
   return (
-    <ShadcnCardFooter className={className}>
+    <div className={`px-4 py-3 border-t border-gray-200 dark:border-gray-700 ${className}`}>
       {children}
-    </ShadcnCardFooter>
+    </div>
   );
 };
 

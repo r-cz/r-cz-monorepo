@@ -1,33 +1,81 @@
-import React from 'react';
-import { ThemeToggle as ShadcnThemeToggle } from '@r-cz/shadcn-ui';
-import { useTheme as useLegacyTheme, ThemeState } from '@r-cz/theme';
-import { useTheme as useShadcnTheme } from '@r-cz/shadcn-ui';
+import { useState, useEffect, useRef } from 'react';
+import { SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
+import { useTheme, ThemeState } from '@r-cz/theme';
 
 export interface ThemeToggleProps {
   className?: string;
 }
 
-// This is a compatibility component that bridges the old theme system
-// with the new shadcn/ui theme system
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
-  const [legacyThemeState, setLegacyThemeState] = useLegacyTheme();
-  const { theme, setTheme } = useShadcnTheme();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [themeState, setThemeState] = useTheme();
 
-  // Sync the shadcn theme changes to the legacy theme system
-  React.useEffect(() => {
-    if (theme === 'light') {
-      setLegacyThemeState({ isDark: false, source: 'user' });
-    } else if (theme === 'dark') {
-      setLegacyThemeState({ isDark: true, source: 'user' });
-    } else if (theme === 'system') {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setLegacyThemeState({ isDark, source: 'system' });
-    }
-  }, [theme, setLegacyThemeState]);
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const setTheme = (isDark: boolean, source: ThemeState['source']) => {
+    setThemeState({
+      isDark,
+      source
+    });
+    setIsOpen(false);
+  };
 
   return (
-    <div className={className}>
-      <ShadcnThemeToggle />
+    <div className={`relative ${className}`} ref={menuRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 
+                   hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        aria-label="Theme settings"
+      >
+        {themeState.source === 'system' ? (
+          <ComputerDesktopIcon className="w-6 h-6" />
+        ) : themeState.isDark ? (
+          <MoonIcon className="w-6 h-6" />
+        ) : (
+          <SunIcon className="w-6 h-6" />
+        )}
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-10">
+          <button
+            onClick={() => setTheme(false, 'user')}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          >
+            <SunIcon className="w-5 h-5" />
+            Light
+          </button>
+          <button
+            onClick={() => setTheme(true, 'user')}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          >
+            <MoonIcon className="w-5 h-5" />
+            Dark
+          </button>
+          <button
+            onClick={() => setTheme(
+              window.matchMedia('(prefers-color-scheme: dark)').matches,
+              'system'
+            )}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          >
+            <ComputerDesktopIcon className="w-5 h-5" />
+            System
+          </button>
+        </div>
+      )}
     </div>
   );
 };

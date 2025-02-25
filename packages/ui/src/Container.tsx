@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container as ShadcnContainer } from '@r-cz/shadcn-ui';
 
 export interface ContainerProps {
   children: React.ReactNode;
@@ -9,6 +8,15 @@ export interface ContainerProps {
   padding?: boolean;
 }
 
+const maxWidthClasses = {
+  sm: 'max-w-screen-sm',
+  md: 'max-w-screen-md',
+  lg: 'max-w-screen-lg',
+  xl: 'max-w-screen-xl',
+  '2xl': 'max-w-screen-2xl',
+  'full': 'max-w-full'
+};
+
 export const Container: React.FC<ContainerProps> = ({ 
   children, 
   className = '',
@@ -17,14 +25,16 @@ export const Container: React.FC<ContainerProps> = ({
   padding = true
 }) => {
   return (
-    <ShadcnContainer
-      className={className}
-      maxWidth={maxWidth}
-      centered={centered}
-      padding={padding}
+    <div 
+      className={`
+        ${maxWidthClasses[maxWidth]} 
+        ${centered ? 'mx-auto' : ''} 
+        ${padding ? 'px-4 sm:px-6 lg:px-8' : ''}
+        ${className}
+      `}
     >
       {children}
-    </ShadcnContainer>
+    </div>
   );
 };
 
