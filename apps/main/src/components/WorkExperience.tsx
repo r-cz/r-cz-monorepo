@@ -25,7 +25,7 @@ const workExperience: WorkExperienceItem[] = [
     company: 'Apple',
     period: 'Jul 2016 - May 2018',
     descriptions: [
-      'Provided technical support for all mobile and desktop Apple devices and related web and cloud services',
+      'Provided technical support for all mobile and desktop Apple devices and related Apple Account and iCloud services',
     ],
     logoPath: '/images/apple-light.svg',
     darkLogoPath: '/images/apple-dark.svg',
