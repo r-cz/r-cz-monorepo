@@ -9,7 +9,9 @@
   ],
   "scripts": {
     "dev": "turbo dev",
-    "build": "turbo build",
+    "build": "npm run build:main && npm run build:tools",
+    "build:main": "cd apps/main && bun run build",
+    "build:tools": "cd apps/tools && bun run build",
     "lint": "turbo lint",
     "preview": "turbo preview",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
