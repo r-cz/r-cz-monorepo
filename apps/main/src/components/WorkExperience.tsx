@@ -15,8 +15,8 @@ const workExperience: WorkExperienceItem[] = [
     company: 'Southwest',
     period: 'Aug 2018 - Present',
     descriptions: [
-      'Building a modern Identity solution for Southwest.com customers.',
-      'Previously migrated legacy Identity solution for the Enterprise to a new Identity solution',
+      'Building a modern Identity solution for 100M+ Southwest.com customers.',
+      'Previously migrated a legacy login solution for the Enterprise to a new Identity Provider enabling 70,000+ employees with SSO and MFA across hundreds of onboarded applications.',
     ],
     logoPath: '/images/LUV.svg',
   },
