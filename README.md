@@ -47,3 +47,15 @@ To add a new site to the monorepo:
 1. Create a new directory under `apps/`
 2. Set up the package.json with dependencies on shared packages
 3. Import and use shared components and configurations
+
+## Deployment
+
+Each app in the monorepo is deployed via Cloudflare Pages to its respective domain/subdomain.
+
+## Common UI Components
+
+Common UI components are stored in the `packages/ui` directory and imported by apps.
+
+## Shared Configuration
+
+Shared configurations are stored in the `packages/config` directory.

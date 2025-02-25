@@ -1,4 +1,2 @@
-// This file will export all UI components
-// For now, it's a placeholder until we extract shared components
-
-export {};
+// Export UI components
+export * from './Button';
