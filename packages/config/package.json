@@ -1,0 +1,18 @@
+{
+  "name": "@r-cz/config",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": [
+    "tailwind.config.ts",
+    "tsconfig.json"
+  ],
+  "dependencies": {
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

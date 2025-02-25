@@ -1,0 +1,13 @@
+name = "ryancruz-com"
+compatibility_date = "2023-10-30"
+
+[site]
+bucket = "./dist"
+
+[build]
+command = "cd ../../ && bun turbo run build --filter=main"
+
+[env.production]
+routes = [
+  { pattern = "/*", zone_name = "ryancruz.com" }
+]
