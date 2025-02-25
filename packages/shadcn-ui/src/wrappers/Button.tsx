@@ -1,58 +1,43 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { Button as ShadcnButton } from '../components/ui/button';
 
-export interface ButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
-  onClick?: () => void;
-  className?: string;
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
   asChild?: boolean;
 }
 
-// Map our variants to shadcn variants
+// Map variants to shadcn variants
 const variantMapping = {
   primary: 'default',
   secondary: 'secondary',
   outline: 'outline',
 } as const;
 
-// Map our sizes to shadcn sizes
+// Map sizes to shadcn sizes
 const sizeMapping = {
   sm: 'sm',
   md: 'default',
   lg: 'lg',
 } as const;
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
-  children,
-  variant = 'primary',
-  size = 'md',
-  onClick,
-  className = '',
-  type = 'button',
-  disabled = false,
-  asChild = false,
-  ...props
-}, ref) => {
-  return (
-    <ShadcnButton
-      ref={ref}
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      variant={variantMapping[variant]}
-      size={sizeMapping[size]}
-      className={className}
-      asChild={asChild}
-      {...props}
-    >
-      {children}
-    </ShadcnButton>
-  );
-});
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, variant = 'primary', size = 'md', asChild, className, ...props }, ref) => {
+    return (
+      <ShadcnButton
+        ref={ref}
+        variant={variantMapping[variant]}
+        size={sizeMapping[size]}
+        className={className}
+        asChild={asChild}
+        {...props}
+      >
+        {children}
+      </ShadcnButton>
+    );
+  }
+);
 
 Button.displayName = 'Button';
 
