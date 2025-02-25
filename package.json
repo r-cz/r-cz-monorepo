@@ -12,7 +12,7 @@
     "build": "npm run build:main && npm run build:tools && npm run copy:dist",
     "build:main": "cd apps/main && bun run build",
     "build:tools": "cd apps/tools && bun run build",
-    "copy:dist": "mkdir -p dist/main dist/tools && cp -r apps/main/dist/* dist/main/ && cp -r apps/tools/dist/* dist/tools/",
+    "copy:dist": "mkdir -p dist && cp -r apps/main/dist dist/main && cp -r apps/tools/dist dist/tools && cp -r public/* dist/",
     "lint": "turbo lint",
     "preview": "turbo preview",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
