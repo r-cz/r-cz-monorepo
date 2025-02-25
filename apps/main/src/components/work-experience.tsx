@@ -27,8 +27,8 @@ function Job({ title, company, logo, period, description }: JobProps) {
           <Image 
             src={logo} 
             alt={`${company} logo`} 
-            layout="fill"
-            objectFit="contain"
+            fill
+            className="object-contain"
           />
         </div>
         <div>
@@ -57,17 +57,23 @@ export function WorkExperience() {
       <Job
         title="Senior Cybersecurity Engineer"
         company="Southwest"
-        logo="/images/southwest-logo.png"
+        logo="/images/LUV.svg"
         period="Aug 2018 - Present"
         description={
           <>
             <p className="mb-4">Building a modern Identity solution for 100M+ Southwest.com customers.</p>
-            <p className="mb-4">Previously migrated a legacy login solution for the Enterprise to a new Identity Provider enabling secure single sign-on.</p>
+            <p className="mb-4">Previously migrated a legacy login solution for the Enterprise to a new Identity Provider enabling 70,000+ employees with SSO and MFA across hundreds of onboarded applications.</p>
           </>
         }
       />
       
-      {/* Add more jobs as needed */}
+      <Job
+        title="Mac+ Technical Advisor"
+        company="Apple"
+        logo="/images/apple-light.svg"
+        period="Jul 2016 - May 2018"
+        description="Provided technical support for all mobile and desktop Apple devices and related Apple Account and iCloud services"
+      />
     </section>
   );
 }

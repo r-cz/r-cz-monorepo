@@ -27,8 +27,8 @@ function EducationItem({ institution, degree, logo, period, description }: Educa
           <Image 
             src={logo} 
             alt={`${institution} logo`} 
-            layout="fill"
-            objectFit="contain"
+            fill
+            className="object-contain"
           />
         </div>
         <div>
@@ -53,14 +53,12 @@ export function Education() {
       <Separator className="mb-8" />
       
       <EducationItem
-        institution="University of Texas at Austin"
-        degree="B.S. Computer Science"
-        logo="/images/utexas-logo.png"
+        institution="University of Georgia"
+        degree="Bachelor of Computer Systems Engineering"
+        logo="/images/uni.svg"
         period="2014 - 2018"
-        description="Focused on cybersecurity and distributed systems."
+        description="Zell Miller Scholarship, Presidential Scholar, Certificate in Emerging Engineering Leaders Development Program"
       />
-      
-      {/* Add more education items as needed */}
     </section>
   );
 }
