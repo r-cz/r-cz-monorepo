@@ -89,5 +89,39 @@ export {
   Separator
 } from './components/ui/separator';
 
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent
+} from './components/ui/tabs';
+
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent
+} from './components/ui/accordion';
+
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from './components/ui/sheet';
+
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider
+} from './components/ui/tooltip';
+
 // Export utilities
 export { cn } from './lib/utils';
