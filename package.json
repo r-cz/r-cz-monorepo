@@ -10,12 +10,13 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "cf-build": "cd apps/main && bun run build"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
-    "turbo": "latest"
+    "turbo": "^2.4.4"
   },
   "packageManager": "bun@1.2.3",
   "engines": {

@@ -1,69 +1,38 @@
-# Cloudflare Pages Deployment Guide
+# Cloudflare Pages Deployment
 
-This monorepo contains multiple sites that are deployed to separate Cloudflare Pages instances:
+This document describes how the monorepo is deployed to Cloudflare Pages.
 
-- `ryancruz.com` - Personal site (in the `apps/main` directory)
-- `tools.ryancruz.com` - Development tools (in the `apps/tools` directory)
+## Setup
 
-## Deployment Configuration
+The repository is a monorepo with multiple applications (`apps/main` and `apps/tools`). Each application is deployed to a separate Cloudflare Pages project.
 
-Each site is deployed as a separate Cloudflare Pages project from the same GitHub repository using Cloudflare's GitHub integration and build watch paths.
+### Main Website (ryancruz.com)
 
-### Configuration for Cloudflare Pages
+The main website is deployed from the `apps/main` directory. Cloudflare Pages is configured to use the `.cloudflare/pages.toml` configuration file which defines:
 
-For each Cloudflare Pages project, use the following settings:
+1. The build command: `bun run cf-build`
+2. The output directory: `apps/main/.next`
 
-1. **GitHub Integration**:
-   - Connect the GitHub repository to Cloudflare Pages
-   - Set up build watches for the specific app directories
+The `cf-build` script navigates to the main app directory and runs the Next.js build command directly, avoiding the need for Turborepo in the Cloudflare environment.
 
-2. **Build settings**:
-   - **Build command**: Use the standard Next.js build command
-     ```
-     npm run build
-     ```
+### Tools Website (tools.ryancruz.com)
 
-3. **Build output directory**:
-   - `.next` (standard Next.js output directory)
+For the tools website, a similar approach is used with a separate Cloudflare Pages project.
 
-4. **Environment variables**:
-   - `NODE_VERSION`: 18.17.0 (or latest LTS)
-   - `NEXT_TELEMETRY_DISABLED`: 1
+## How to Update the Deployment
 
-## Build Watch Paths
+When making changes to the deployment process:
 
-Cloudflare Pages can be configured to only build when specific files change. This is useful for a monorepo setup:
+1. Update the root `package.json` scripts if needed
+2. Update the `.cloudflare/pages.toml` configuration
+3. Commit and push the changes to trigger a new deployment
 
-### Main site (ryancruz.com):
-- `apps/main/**/*`
-- `packages/**/*`
+## Troubleshooting
 
-### Tools site (tools.ryancruz.com):
-- `apps/tools/**/*`
-- `packages/**/*`
+If deployment fails, check:
 
-## Testing Locally
+1. The build logs in Cloudflare Pages dashboard
+2. Ensure all workspace dependencies are correctly installed
+3. Verify the build script can access all necessary dependencies
 
-To test the build process locally:
-
-```bash
-# To build all apps
-bun build
-
-# To build the main site only
-bun --cwd apps/main build
-
-# To build the tools site only
-bun --cwd apps/tools build
-```
-
-## Migration to Next.js App Router
-
-This project has been migrated from a custom Vite-based build to Next.js App Router for better performance, developer experience, and easier deployment.
-
-### Key Changes
-
-1. Switched from Vite to Next.js for both apps
-2. Implemented App Router for improved routing and data fetching
-3. Streamlined the UI components to exclusively use shadcn/ui
-4. Configured for direct deployment from GitHub to Cloudflare Pages
+Remember that Cloudflare Pages has specific environment constraints, and not all Node.js features may be available.

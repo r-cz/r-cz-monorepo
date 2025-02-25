@@ -1,0 +1,10 @@
+# Configuration for Cloudflare Pages
+[build]
+command = "bun run cf-build"
+base = "/"
+output_directory = "apps/main/.next"
+root_dir = "."
+
+[build.environment]
+NODE_VERSION = "18"
+BUN_VERSION = "1.2.3"
