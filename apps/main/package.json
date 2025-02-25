@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "@r-cz/theme": "workspace:*",
     "@r-cz/ui": "workspace:*",
+    "@r-cz/shadcn-ui": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -23,6 +24,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "^4.5.5"
   }
 }
