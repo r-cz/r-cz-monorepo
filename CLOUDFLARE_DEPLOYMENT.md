@@ -1,65 +1,38 @@
-# Cloudflare Pages Deployment Guide
+# Cloudflare Pages Deployment
 
-This monorepo contains multiple sites that are deployed to separate Cloudflare Pages instances:
+This document describes how the monorepo is deployed to Cloudflare Pages.
 
-- `ryancruz.com` - Personal site (in the `apps/main` directory)
-- `tools.ryancruz.com` - Development tools (in the `apps/tools` directory)
+## Setup
 
-## Deployment Configuration
+The repository is a monorepo with multiple applications (`apps/main` and `apps/tools`). Each application is deployed to a separate Cloudflare Pages project.
 
-Each site is deployed as a separate Cloudflare Pages project, but they share the same GitHub repository.
+### Main Website (ryancruz.com)
 
-### Configuration for Cloudflare Pages
+The main website is deployed from the `apps/main` directory. Cloudflare Pages is configured to use the `.cloudflare/pages.toml` configuration file which defines:
 
-For each Cloudflare Pages project, use the following build settings:
+1. The build command: `bun run cf-build`
+2. The output directory: `apps/main/.next`
 
-1. **Build command:**
-   ```
-   bun run build:cf
-   ```
+The `cf-build` script navigates to the main app directory and runs the Next.js build command directly, avoiding the need for Turborepo in the Cloudflare environment.
 
-2. **Build output directory:**
-   - For `ryancruz.com`: `apps/main/dist`
-   - For `tools.ryancruz.com`: `apps/tools/dist`
+### Tools Website (tools.ryancruz.com)
 
-3. **Environment variables:**
-   - `NODE_VERSION`: 18.17.0 (or latest LTS)
-   - `CF_PAGES_BRANCH`: Set this to match the app directory name
-     - For main site: `main`
-     - For tools site: `tools`
+For the tools website, a similar approach is used with a separate Cloudflare Pages project.
 
-## How It Works
+## How to Update the Deployment
 
-The `build:cf` script ensures proper build order for all dependencies:
+When making changes to the deployment process:
 
-1. First, it analyzes and builds all package dependencies in the correct order
-   - Only packages with a defined build script in their package.json will be built
-   - It builds them in sequence: config → theme → shadcn-ui → ui
+1. Update the root `package.json` scripts if needed
+2. Update the `.cloudflare/pages.toml` configuration
+3. Commit and push the changes to trigger a new deployment
 
-2. Then, it builds the specific app based on the `CF_PAGES_BRANCH` environment variable
+## Troubleshooting
 
-This ensures that when Cloudflare Pages builds your project, all internal dependencies are correctly built and available before the app itself is built.
+If deployment fails, check:
 
-## Common Deployment Issues
+1. The build logs in Cloudflare Pages dashboard
+2. Ensure all workspace dependencies are correctly installed
+3. Verify the build script can access all necessary dependencies
 
-### Problem: "Failed to resolve entry for package @r-cz/shadcn-ui"
-
-This occurs when the build process on Cloudflare Pages attempts to build the main app before its dependencies are properly built. Our custom build script fixes this by ensuring dependencies are built first.
-
-## Local Testing
-
-To test the build process locally:
-
-```bash
-# To build the main site
-APP_TO_BUILD=main bun ./cloudflare-build.js
-
-# To build the tools site
-APP_TO_BUILD=tools bun ./cloudflare-build.js
-```
-
-## Future Improvements
-
-- Consider adding a pre-commit hook to ensure all packages build successfully before committing
-- If package structure changes, update the order in the `cloudflare-build.js` script
-- For complex dependency changes, consider using turborepo's dependency graph instead of hardcoded order
+Remember that Cloudflare Pages has specific environment constraints, and not all Node.js features may be available.

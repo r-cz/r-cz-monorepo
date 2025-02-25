@@ -1,8 +1,16 @@
-// Export UI components
-export * from './Button';
-export * from './ThemeToggle';
-export * from './Layout';
-export * from './Card';
-export * from './Container';
-export * from './Header';
-export * from './Footer';
+// Export components
+export * from "./components/ui/button";
+export * from "./components/ui/card";
+export * from "./components/ui/avatar";
+export * from "./components/ui/dialog";
+export * from "./components/ui/dropdown-menu";
+export * from "./components/ui/separator";
+export * from "./components/ui/tabs";
+export * from "./components/ui/toggle";
+export * from "./components/ui/tooltip";
+
+// Export layout components
+export * from "./components/layout/theme-provider";
+
+// Export utils
+export * from "./lib/utils";
