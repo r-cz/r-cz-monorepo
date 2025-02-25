@@ -1,10 +1,15 @@
 import React from 'react';
-import { ThemeToggle } from './ThemeToggle';
+import { Header, HeaderProps } from './Header';
+import { Footer, FooterProps } from './Footer';
+import { Container } from './Container';
 
 export interface LayoutProps {
   children: React.ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
-  showThemeToggle?: boolean;
+  header?: HeaderProps;
+  footer?: FooterProps;
+  skipHeader?: boolean;
+  skipFooter?: boolean;
 }
 
 const maxWidthClasses = {
@@ -19,20 +24,22 @@ const maxWidthClasses = {
 export const Layout: React.FC<LayoutProps> = ({ 
   children, 
   maxWidth = 'xl',
-  showThemeToggle = true
+  header = {},
+  footer = {},
+  skipHeader = false,
+  skipFooter = false
 }) => {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <div className={`mx-auto ${maxWidthClasses[maxWidth]} px-4 py-8`}>
-        {showThemeToggle && (
-          <div className="flex justify-end mb-4">
-            <ThemeToggle />
-          </div>
-        )}
-        <main>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      {!skipHeader && <Header {...header} />}
+      
+      <main className="flex-grow py-8">
+        <Container maxWidth={maxWidth}>
           {children}
-        </main>
-      </div>
+        </Container>
+      </main>
+      
+      {!skipFooter && <Footer {...footer} />}
     </div>
   );
 };

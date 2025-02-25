@@ -1,4 +1,4 @@
-// This file serves as an entry point to all tools
+import React from 'react';
 
 export interface Tool {
   id: string;
@@ -8,5 +8,7 @@ export interface Tool {
   icon: React.FC<{ className?: string }>;
 }
 
-// Tool exports will go here as the tools are implemented
-export const tools: Tool[] = [];
+const JWTDecoder = React.lazy(() => import('./JWTDecoder'));
+const MermaidViewer = React.lazy(() => import('./MermaidViewer'));
+
+export { JWTDecoder, MermaidViewer };

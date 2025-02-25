@@ -1,30 +1,38 @@
+import React, { useEffect } from 'react';
 import { useTheme } from '@r-cz/theme';
-import { Button, Layout } from '@r-cz/ui';
+import { Layout, Footer } from '@r-cz/ui';
+import ProfileSection from './components/ProfileSection';
+import WorkExperience from './components/WorkExperience';
+import Education from './components/Education';
+import HamburgerMenu from './components/HamburgerMenu';
 
 function App() {
-  const [themeState, setThemeState] = useTheme();
-
-  const toggleTheme = () => {
-    setThemeState(prev => ({
-      isDark: !prev.isDark,
-      source: 'user'
-    }));
-  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <Layout>
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Ryan Cruz</h1>
-        <p className="text-xl mb-8">Personal Website</p>
-        <p className="mb-4">This is a placeholder for the main site in the monorepo structure.</p>
-        <div className="flex justify-center space-x-4">
-          <Button 
-            variant="primary" 
-            onClick={() => window.open('https://tools.ryancruz.com', '_blank')}
-          >
-            Visit Tools Site
-          </Button>
+    <Layout
+      header={{
+        title: 'Ryan Cruz',
+        showThemeToggle: true
+      }}
+      footer={{
+        links: [
+          { label: 'Tools', href: 'https://tools.ryancruz.com', external: true },
+          { label: 'GitHub', href: 'https://github.com/r-cz', external: true },
+          { label: 'LinkedIn', href: 'https://linkedin.com/in/cruzryan', external: true }
+        ]
+      }}
+    >
+      <div className="relative max-w-4xl mx-auto">
+        <div className="fixed top-4 left-4 z-50">
+          <HamburgerMenu />
         </div>
+        
+        <ProfileSection />
+        <WorkExperience />
+        <Education />
       </div>
     </Layout>
   );

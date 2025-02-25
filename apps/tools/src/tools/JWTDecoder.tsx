@@ -181,7 +181,7 @@ function JWTDecoder() {
     value: string;
     onChange: (value: string) => void;
     placeholder: string;
-    label: string;
+    label?: string;
   }> = ({ value, onChange, placeholder }) => (
     <div className="w-full">
       <textarea
