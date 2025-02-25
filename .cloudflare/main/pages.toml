@@ -1,6 +1,6 @@
 # Configuration for Cloudflare Pages
 [build]
-command = "bun run cf-build"
+command = "bun run cf-build-main"
 base = "/"
 output_directory = "apps/main/.next"
 root_dir = "."

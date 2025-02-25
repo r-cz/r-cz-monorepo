@@ -11,7 +11,8 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "cf-build": "cd apps/main && bun run build"
+    "cf-build-main": "cd apps/main && bun run build",
+    "cf-build-tools": "cd apps/tools && bun run build"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
