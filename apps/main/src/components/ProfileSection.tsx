@@ -1,6 +1,4 @@
 import { useMemo } from 'react';
-import ProgressiveImage from './ProgressiveImage';
-import ProfileDialog from './ProfileDialog';
 import { Avatar, AvatarImage, AvatarFallback } from '@r-cz/shadcn-ui';
 
 interface ProfileImage {
@@ -43,18 +41,14 @@ const ProfileSection = () => {
     <section className="text-center mb-12">
       <div className="mb-6">
         <div className="w-32 h-32 mx-auto mb-4">
-          <ProfileDialog>
-            <button className="rounded-full overflow-hidden transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
-              <Avatar className="w-32 h-32">
-                <AvatarImage 
-                  src={profileImage.png} 
-                  alt="Profile"
-                  className="object-cover" 
-                />
-                <AvatarFallback className="text-3xl">RC</AvatarFallback>
-              </Avatar>
-            </button>
-          </ProfileDialog>
+          <Avatar className="w-32 h-32">
+            <AvatarImage 
+              src={profileImage.png} 
+              alt="Profile"
+              className="object-cover" 
+            />
+            <AvatarFallback className="text-3xl">RC</AvatarFallback>
+          </Avatar>
         </div>
         <h1 className="text-4xl font-bold mb-2">
           Ryan Cruz

@@ -9,6 +9,9 @@ import * as ThemeToggleWrapper from './wrappers/ThemeToggle';
 
 // Export them with the original names
 export const Button = ButtonWrapper.Button;
+// Also export the ShadcnButton directly for use in dropdown menu
+// Make sure we export all the separate components with different names
+export { Button as ShadcnButton } from './components/ui/button';
 export const Card = CardWrapper.Card;
 export const CardHeader = CardWrapper.CardHeader;
 export const CardContent = CardWrapper.CardContent;
