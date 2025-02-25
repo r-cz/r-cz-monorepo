@@ -57,7 +57,7 @@ function ToolsList() {
       name: 'Mermaid Viewer',
       description: 'Live preview for Mermaid diagrams',
       path: '/mermaid',
-      icon: '📊'
+      icon: '🧜‍♀️'
     }
   ];
 
