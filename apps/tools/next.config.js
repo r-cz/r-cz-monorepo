@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@r-cz/ui"],
+  output: 'standalone',
   // Resolve the "document is not defined" error
   webpack: (config) => {
     config.resolve.fallback = {
