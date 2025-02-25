@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Wrench } from 'lucide-react';
-import { useTheme } from '@r-cz/theme';
-import { Layout, Card, CardContent, ThemeToggle } from '@r-cz/shadcn-ui';
+import { Layout, Card, CardContent } from '@r-cz/shadcn-ui';
+import ThemeToggle from './components/ThemeToggle';
 
 // Lazy load tool components
 const JWTDecoder = lazy(() => import('./tools/JWTDecoder'));

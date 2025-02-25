@@ -1,17 +1,46 @@
 import { useState, useEffect, useRef } from 'react';
 import { SunIcon, MoonIcon, LaptopIcon } from 'lucide-react';
-import { useTheme } from '@r-cz/theme';
 import { Button } from '../components/ui/button';
 import { cn } from '../lib/utils';
 
-export interface ThemeToggleProps {
-  className?: string;
+// ThemeState type for compatibility
+interface ThemeState {
+  isDark: boolean;
+  source: 'user' | 'system' | 'localStorage';
 }
 
-export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
+export interface ThemeToggleProps {
+  className?: string;
+  // For direct use without context
+  isDark?: boolean;
+  onToggle?: (isDark: boolean) => void;
+}
+
+export const ThemeToggle: React.FC<ThemeToggleProps> = ({ 
+  className = '',
+  isDark,
+  onToggle
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [themeState, setThemeState] = useTheme();
+  
+  // We'll try to use the useTheme hook if available, but won't fail if it's not
+  let themeState: ThemeState | undefined;
+  let setThemeState: ((value: ThemeState) => void) | undefined;
+  
+  try {
+    // Only import this dynamically if it's available
+    const useThemeModule = require('@r-cz/theme').useTheme;
+    if (useThemeModule) {
+      [themeState, setThemeState] = useThemeModule();
+    }
+  } catch (e) {
+    // Theme context is not available, we'll use props instead
+    themeState = isDark !== undefined ? { 
+      isDark, 
+      source: 'user' 
+    } : undefined;
+  }
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -25,11 +54,34 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const setTheme = (isDark: boolean, source: 'user' | 'system' | 'localStorage') => {
-    setThemeState({
-      isDark,
-      source
-    });
+  // Fallback to checking document class if no context or props
+  if (!themeState && isDark === undefined) {
+    themeState = {
+      isDark: document.documentElement.classList.contains('dark'),
+      source: 'system'
+    };
+  }
+
+  // Default to light mode if all else fails
+  const currentIsDark = themeState?.isDark ?? isDark ?? false;
+  const currentSource = themeState?.source ?? 'user';
+
+  const setTheme = (newIsDark: boolean, source: 'user' | 'system' | 'localStorage') => {
+    if (setThemeState) {
+      setThemeState({
+        isDark: newIsDark,
+        source
+      });
+    } else if (onToggle) {
+      onToggle(newIsDark);
+    } else {
+      // Fallback to manually toggling the class
+      if (newIsDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
     setIsOpen(false);
   };
 
@@ -41,9 +93,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Theme settings"
       >
-        {themeState.source === 'system' ? (
+        {currentSource === 'system' ? (
           <LaptopIcon className="h-[1.2rem] w-[1.2rem]" />
-        ) : themeState.isDark ? (
+        ) : currentIsDark ? (
           <MoonIcon className="h-[1.2rem] w-[1.2rem]" />
         ) : (
           <SunIcon className="h-[1.2rem] w-[1.2rem]" />
@@ -57,14 +109,14 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
             className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2"
           >
             <SunIcon className="w-4 h-4" />
-            Light
+            <span>Light</span>
           </button>
           <button
             onClick={() => setTheme(true, 'user')}
             className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2"
           >
             <MoonIcon className="w-4 h-4" />
-            Dark
+            <span>Dark</span>
           </button>
           <button
             onClick={() => setTheme(
@@ -74,7 +126,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
             className="w-full px-4 py-2 text-left hover:bg-muted flex items-center gap-2"
           >
             <LaptopIcon className="w-4 h-4" />
-            System
+            <span>System</span>
           </button>
         </div>
       )}

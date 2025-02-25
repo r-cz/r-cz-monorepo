@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import {
     FileText,
     Mail,
-    ChevronRight,
     User,
     Wrench,
     Menu as MenuIcon
@@ -26,7 +25,7 @@ const HamburgerMenu = () => {
         <div className="relative" ref={menuRef}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon" aria-label="Navigation menu">
+                    <Button variant="outline" size="icon">
                         <MenuIcon className="h-5 w-5" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -37,29 +36,29 @@ const HamburgerMenu = () => {
                             <span>Contact</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuSubContent>
-                            <DropdownMenuItem asChild>
-                                <a href="mailto:mail@ryancruz.com" className="cursor-pointer">
+                            <DropdownMenuItem>
+                                <a href="mailto:mail@ryancruz.com" className="flex items-center w-full">
                                     <Mail className="mr-2 h-4 w-4" />
                                     <span>Email</span>
                                 </a>
                             </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
+                            <DropdownMenuItem>
                                 <a 
                                     href="/Resume.pdf" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="cursor-pointer"
+                                    className="flex items-center w-full"
                                 >
                                     <FileText className="mr-2 h-4 w-4" />
                                     <span>Resume</span>
                                 </a>
                             </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
+                            <DropdownMenuItem>
                                 <a 
                                     href="https://linkedin.com/in/cruzryan" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="cursor-pointer"
+                                    className="flex items-center w-full"
                                 >
                                     <svg
                                         className="mr-2 h-4 w-4"
@@ -79,12 +78,12 @@ const HamburgerMenu = () => {
                     
                     <DropdownMenuSeparator />
                     
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem>
                         <a 
                             href="https://tools.ryancruz.com" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="cursor-pointer"
+                            className="flex items-center w-full"
                         >
                             <Wrench className="mr-2 h-4 w-4" />
                             <span>Tools</span>

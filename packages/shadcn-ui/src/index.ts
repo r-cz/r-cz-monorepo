@@ -125,3 +125,5 @@ export {
 
 // Export utilities
 export { cn } from './lib/utils';
+
+// Note: CSS is imported directly in the apps
