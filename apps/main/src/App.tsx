@@ -5,6 +5,7 @@ import ProfileSection from './components/ProfileSection';
 import WorkExperience from './components/WorkExperience';
 import Education from './components/Education';
 import HamburgerMenu from './components/HamburgerMenu';
+import { ThemeToggle } from '@r-cz/ui';
 
 function App() {
   useEffect(() => {
@@ -12,22 +13,13 @@ function App() {
   }, []);
 
   return (
-    <Layout
-      header={{
-        title: 'Ryan Cruz',
-        showThemeToggle: true
-      }}
-      footer={{
-        links: [
-          { label: 'Tools', href: 'https://tools.ryancruz.com', external: true },
-          { label: 'GitHub', href: 'https://github.com/r-cz', external: true },
-          { label: 'LinkedIn', href: 'https://linkedin.com/in/cruzryan', external: true }
-        ]
-      }}
-    >
+    <Layout>
       <div className="relative max-w-4xl mx-auto">
         <div className="fixed top-4 left-4 z-50">
           <HamburgerMenu />
+        </div>
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
         </div>
         
         <ProfileSection />

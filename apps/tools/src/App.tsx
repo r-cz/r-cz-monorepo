@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '@r-cz/theme';
-import { Layout, Card, CardContent } from '@r-cz/ui';
+import { Layout, Card, CardContent, ThemeToggle } from '@r-cz/ui';
 
 // Lazy load tool components
 const JWTDecoder = lazy(() => import('./tools/JWTDecoder'));
@@ -18,19 +18,15 @@ interface Tool {
 function App() {
   return (
     <Router>
-      <Layout
-        header={{
-          title: 'Developer Tools',
-          logo: <WrenchScrewdriverIcon className="h-8 w-8 text-primary-600" />,
-          showThemeToggle: true
-        }}
-        footer={{
-          links: [
-            { label: 'Main Site', href: 'https://ryancruz.com', external: true },
-            { label: 'GitHub', href: 'https://github.com/r-cz', external: true }
-          ]
-        }}
-      >
+      <Layout>
+        <div className="w-full flex justify-between items-center mb-6">
+          <div className="flex items-center"> 
+            <WrenchScrewdriverIcon className="h-8 w-8 text-primary-600 mr-2" />
+            <span className="text-xl font-semibold">Developer Tools</span>
+          </div>
+          <ThemeToggle />
+        </div>
+        
         <Suspense
           fallback={
             <div className="flex items-center justify-center h-32">
