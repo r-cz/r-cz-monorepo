@@ -41,7 +41,7 @@ export function Header() {
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <a href="https://www.linkedin.com/in/ryancruz" target="_blank" rel="noopener noreferrer" className="flex items-center">
+                <a href="https://www.linkedin.com/in/cruzryan" target="_blank" rel="noopener noreferrer" className="flex items-center">
                   <Linkedin className="mr-2 h-4 w-4" />
                   <span>LinkedIn</span>
                 </a>
