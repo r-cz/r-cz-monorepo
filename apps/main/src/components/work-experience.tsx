@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { 
   Card, 
   CardContent, 
@@ -20,12 +21,22 @@ interface JobProps {
 }
 
 function Job({ title, company, logo, period, description }: JobProps) {
+  const { resolvedTheme, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  
+  // After mounting, we have access to the theme
+  React.useEffect(() => setMounted(true), []);
   return (
     <Card className="mb-6">
       <CardHeader className="flex flex-row items-center gap-4">
         <div className="w-12 h-12 relative overflow-hidden rounded-md">
           <Image 
-            src={logo} 
+            src={company === "Apple" && logo === "/images/apple-light.svg" && mounted
+              ? resolvedTheme === "dark" 
+                ? "/images/apple-dark.svg" 
+                : "/images/apple-light.svg"
+              : logo
+            } 
             alt={`${company} logo`} 
             fill
             className="object-contain"
