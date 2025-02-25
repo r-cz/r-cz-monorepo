@@ -81,7 +81,7 @@ export function WorkExperience() {
       <Job
         title="Mac+ Technical Advisor"
         company="Apple"
-        logo="/images/apple-light.svg"
+        logo="/images/apple-light.svg" // This will be replaced by theme-aware logic
         period="Jul 2016 - May 2018"
         description="Provided technical support for all mobile and desktop Apple devices and related Apple Account and iCloud services"
       />
