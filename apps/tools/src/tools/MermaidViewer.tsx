@@ -2,6 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import mermaid from 'mermaid';
 
+import { 
+  Button, 
+  Card, 
+  CardContent, 
+  Textarea, 
+  Alert, 
+  AlertDescription 
+} from '@r-cz/shadcn-ui';
+
 interface Example {
   name: string;
   code: string;
@@ -128,7 +137,7 @@ function MermaidViewer() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-bold">Mermaid Diagram Viewer</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-muted-foreground">
           Create and preview Mermaid diagrams with live updates
         </p>
       </div>
@@ -137,16 +146,14 @@ function MermaidViewer() {
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
             {examples.map((example) => (
-              <button
+              <Button
                 key={example.name}
                 onClick={() => loadExample(example)}
-                className={`px-3 py-1 text-sm rounded-md transition-colors ${selectedExample === example.name
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  }`}
+                variant={selectedExample === example.name ? "default" : "secondary"}
+                size="sm"
               >
                 {example.name}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -154,13 +161,12 @@ function MermaidViewer() {
             <label htmlFor="mermaid-code" className="block text-sm font-medium mb-1">
               Diagram Code
             </label>
-            <textarea
+            <Textarea
               id="mermaid-code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full h-96 font-mono text-sm px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 border-border"
+              className="h-96 font-mono"
               placeholder="Enter your Mermaid diagram code here..."
-              spellCheck="false"
             />
           </div>
         </div>
@@ -168,49 +174,54 @@ function MermaidViewer() {
         <div className="space-y-4">
           <h2 className="text-lg font-medium">Preview</h2>
           {error ? (
-            <div className="p-4 text-sm border rounded-md bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400">
-              {error}
-            </div>
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
           ) : svg ? (
-            <div
-              className="p-4 bg-white dark:bg-gray-800 rounded-md shadow overflow-auto border border-border"
-              dangerouslySetInnerHTML={{ __html: svg }}
-            />
+            <Card className="overflow-auto">
+              <CardContent className="p-4">
+                <div dangerouslySetInnerHTML={{ __html: svg }} />
+              </CardContent>
+            </Card>
           ) : (
-            <div className="p-4 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 rounded-md border border-border">
-              Your diagram preview will appear here
-            </div>
+            <Card>
+              <CardContent className="p-4 text-muted-foreground">
+                Your diagram preview will appear here
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>
 
       {showAbout && (
-        <div className="p-4 border rounded-md border-border bg-gray-50 dark:bg-gray-800 relative">
-          <button
-            onClick={() => setShowAbout(false)}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Close about section"
-          >
-            <XMarkIcon className="h-5 w-5" />
-          </button>
-          <h2 className="text-lg font-semibold mb-2">About Mermaid Diagrams</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Mermaid lets you create diagrams and visualizations using text and code.
-            It supports many diagram types including flowcharts, sequence diagrams,
-            class diagrams, state diagrams, and more. The syntax is simple and
-            markdown-like, making it easy to maintain and version control your diagrams.
-          </p>
-          <div className="mt-2">
-            <a
-              href="https://mermaid.js.org/syntax/flowchart.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline"
+        <Card className="relative">
+          <CardContent className="pt-6">
+            <button
+              onClick={() => setShowAbout(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
+              aria-label="Close about section"
             >
-              View Mermaid Syntax Documentation →
-            </a>
-          </div>
-        </div>
+              <XMarkIcon className="h-5 w-5" />
+            </button>
+            <h2 className="text-lg font-semibold mb-2">About Mermaid Diagrams</h2>
+            <p className="text-sm text-muted-foreground">
+              Mermaid lets you create diagrams and visualizations using text and code.
+              It supports many diagram types including flowcharts, sequence diagrams,
+              class diagrams, state diagrams, and more. The syntax is simple and
+              markdown-like, making it easy to maintain and version control your diagrams.
+            </p>
+            <div className="mt-2">
+              <a
+                href="https://mermaid.js.org/syntax/flowchart.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-primary hover:underline"
+              >
+                View Mermaid Syntax Documentation →
+              </a>
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

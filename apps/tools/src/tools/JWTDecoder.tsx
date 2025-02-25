@@ -3,6 +3,16 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Highlight, themes } from 'prism-react-renderer';
 import * as jose from 'jose';
 
+import { 
+  Button, 
+  Card, 
+  CardContent,
+  Textarea,
+  Alert,
+  AlertTitle,
+  AlertDescription 
+} from '@r-cz/shadcn-ui';
+
 interface DecodedPart {
   [key: string]: any;
 }
@@ -156,7 +166,7 @@ function JWTDecoder() {
     return formatJSON(formatted);
   };
 
-  // Components for displaying JSON and token input
+  // Components for displaying JSON
   const JsonDisplay: React.FC<{ content: string }> = ({ content }) => (
     <Highlight
       theme={themes.nightOwl}
@@ -177,28 +187,11 @@ function JWTDecoder() {
     </Highlight>
   );
 
-  const TokenInput: React.FC<{
-    value: string;
-    onChange: (value: string) => void;
-    placeholder: string;
-    label?: string;
-  }> = ({ value, onChange, placeholder }) => (
-    <div className="w-full">
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full h-32 px-3 py-2 text-sm font-mono bg-white dark:bg-gray-800 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none resize-none"
-        placeholder={placeholder}
-        spellCheck="false"
-      />
-    </div>
-  );
-
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-bold">JWT Decoder</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-muted-foreground">
           Paste your JWT token and optionally provide JWKS content for signature verification
         </p>
       </div>
@@ -208,9 +201,10 @@ function JWTDecoder() {
           <label className="block text-sm font-medium mb-1">
             JWT Token
           </label>
-          <TokenInput
+          <Textarea
             value={token}
-            onChange={setToken}
+            onChange={(e) => setToken(e.target.value)}
+            className="font-mono h-32 resize-none"
             placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           />
         </div>
@@ -219,37 +213,34 @@ function JWTDecoder() {
           <label className="block text-sm font-medium mb-1">
             JWKS Content (optional)
           </label>
-          <TokenInput
+          <Textarea
             value={jwks}
-            onChange={setJwks}
+            onChange={(e) => setJwks(e.target.value)}
+            className="font-mono h-32 resize-none"
             placeholder={'{\n  "keys": [\n    {\n      "kty": "RSA",\n      "kid": "...",\n      ...\n    }\n  ]\n}'}
           />
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Paste the content of your JWKS endpoint to verify the token's signature
           </p>
         </div>
 
-        <button
+        <Button
           onClick={decodeToken}
           disabled={isVerifying}
-          className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 transition-colors duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
         >
           {isVerifying ? 'Verifying...' : 'Decode Token'}
-        </button>
+        </Button>
 
         {error && (
-          <div className="p-4 text-sm border rounded-md bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400">
-            {error}
-          </div>
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
 
         {signatureStatus && (
-          <div className={`p-4 text-sm border rounded-md ${signatureStatus.verified
-            ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-600 dark:text-green-400'
-            : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400'
-            }`}>
-            {signatureStatus.message}
-          </div>
+          <Alert variant={signatureStatus.verified ? "default" : "destructive"}>
+            <AlertDescription>{signatureStatus.message}</AlertDescription>
+          </Alert>
         )}
 
         {decodedHeader && (
@@ -268,51 +259,53 @@ function JWTDecoder() {
       </div>
 
       {showAbout && (
-        <div className="mt-8 p-4 border rounded-md border-border bg-gray-50 dark:bg-gray-800 relative">
-          <button
-            onClick={() => setShowAbout(false)}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Close about section"
-          >
-            <XMarkIcon className="h-5 w-5" />
-          </button>
-          <h2 className="text-lg font-semibold mb-2">About JWT Tokens</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            JSON Web Tokens (JWT) are an open standard (
-            <a
-              href="https://tools.ietf.org/html/rfc7519"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
+        <Card className="mt-8 relative">
+          <CardContent className="pt-6">
+            <button
+              onClick={() => setShowAbout(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
+              aria-label="Close about section"
             >
-              RFC 7519
-            </a>
-            ) that define a compact and self-contained way for securely transmitting
-            information between parties as a JSON object. JWTs consist of three parts:
-          </p>
-          <ul className="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
-            <li className="text-blue-500 dark:text-blue-400">• Header: Contains the token type and signing algorithm</li>
-            <li className="text-purple-500 dark:text-purple-400">• Payload: Contains the claims (data)</li>
-            <li className="text-green-500 dark:text-green-400">• Signature: Verifies the token hasn't been altered</li>
-          </ul>
-          <div className="mt-4">
-            <h3 className="text-sm font-semibold mb-1">Signature Verification</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              To verify a token's signature, you'll need the JWKS (JSON Web Key Set) content from your identity provider.
-              You can typically find this at endpoints like:
+              <XMarkIcon className="h-5 w-5" />
+            </button>
+            <h2 className="text-lg font-semibold mb-2">About JWT Tokens</h2>
+            <p className="text-sm text-muted-foreground">
+              JSON Web Tokens (JWT) are an open standard (
+              <a
+                href="https://tools.ietf.org/html/rfc7519"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                RFC 7519
+              </a>
+              ) that define a compact and self-contained way for securely transmitting
+              information between parties as a JSON object. JWTs consist of three parts:
             </p>
-            <ul className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-              <li>• PingFederate: https://YOUR_DOMAIN/pf/JWKS</li>
-              <li>• Auth0: https://YOUR_DOMAIN/.well-known/jwks.json</li>
-              <li>• Okta: https://YOUR_DOMAIN/oauth2/default/v1/keys</li>
-              <li>• Azure AD: https://login.microsoftonline.com/TENANT_ID/discovery/v2.0/keys</li>
+            <ul className="mt-2 space-y-1 text-sm">
+              <li className="text-blue-500 dark:text-blue-400">• Header: Contains the token type and signing algorithm</li>
+              <li className="text-purple-500 dark:text-purple-400">• Payload: Contains the claims (data)</li>
+              <li className="text-green-500 dark:text-green-400">• Signature: Verifies the token hasn't been altered</li>
             </ul>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Visit these URLs in your browser, copy the JSON content, and paste it into the JWKS Content field above
-              to verify your token's signature.
-            </p>
-          </div>
-        </div>
+            <div className="mt-4">
+              <h3 className="text-sm font-semibold mb-1">Signature Verification</h3>
+              <p className="text-sm text-muted-foreground">
+                To verify a token's signature, you'll need the JWKS (JSON Web Key Set) content from your identity provider.
+                You can typically find this at endpoints like:
+              </p>
+              <ul className="mt-1 text-sm text-muted-foreground">
+                <li>• PingFederate: https://YOUR_DOMAIN/pf/JWKS</li>
+                <li>• Auth0: https://YOUR_DOMAIN/.well-known/jwks.json</li>
+                <li>• Okta: https://YOUR_DOMAIN/oauth2/default/v1/keys</li>
+                <li>• Azure AD: https://login.microsoftonline.com/TENANT_ID/discovery/v2.0/keys</li>
+              </ul>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Visit these URLs in your browser, copy the JSON content, and paste it into the JWKS Content field above
+                to verify your token's signature.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
