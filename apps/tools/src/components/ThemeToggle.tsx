@@ -1,77 +1,52 @@
-import { useState, useEffect, useRef } from 'react';
-import { SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
-import { useTheme, ThemeState } from '@r-cz/theme';
+import React from 'react';
+import { Sun, Moon, Laptop } from 'lucide-react';
+import { useTheme } from '@r-cz/theme';
+import { Button } from '@r-cz/shadcn-ui';
 
 const ThemeToggle = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
   const [themeState, setThemeState] = useTheme();
 
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
+  const toggleTheme = () => {
+    if (themeState.source === 'system') {
+      // If currently using system, switch to explicit light/dark
+      const isDark = document.documentElement.classList.contains('dark');
+      setThemeState({
+        isDark: !isDark,
+        source: 'user'
+      });
+    } else {
+      // Toggle between light/dark
+      setThemeState({
+        isDark: !themeState.isDark,
+        source: 'user'
+      });
+    }
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const setTheme = (isDark: boolean, source: ThemeState['source']) => {
+  const setSystemTheme = () => {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     setThemeState({
       isDark,
-      source
+      source: 'system'
     });
-    setIsOpen(false);
   };
 
   return (
-    <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 
-                   hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-        aria-label="Theme settings"
+    <div className="relative">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
       >
         {themeState.source === 'system' ? (
-          <ComputerDesktopIcon className="w-6 h-6" />
+          <Laptop className="h-[1.2rem] w-[1.2rem]" />
         ) : themeState.isDark ? (
-          <MoonIcon className="w-6 h-6" />
+          <Moon className="h-[1.2rem] w-[1.2rem]" />
         ) : (
-          <SunIcon className="w-6 h-6" />
+          <Sun className="h-[1.2rem] w-[1.2rem]" />
         )}
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
-          <button
-            onClick={() => setTheme(false, 'user')}
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          >
-            <SunIcon className="w-5 h-5" />
-            Light
-          </button>
-          <button
-            onClick={() => setTheme(true, 'user')}
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          >
-            <MoonIcon className="w-5 h-5" />
-            Dark
-          </button>
-          <button
-            onClick={() => setTheme(
-              window.matchMedia('(prefers-color-scheme: dark)').matches,
-              'system'
-            )}
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          >
-            <ComputerDesktopIcon className="w-5 h-5" />
-            System
-          </button>
-        </div>
-      )}
+      </Button>
     </div>
   );
 };
