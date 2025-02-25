@@ -1,8 +1,13 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
-import { useTheme } from '@r-cz/theme';
-import { Layout, Card, CardContent, ThemeToggle } from '@r-cz/ui';
+import { useTheme as useLegacyTheme } from '@r-cz/theme';
+import { 
+  Layout, 
+  Card, 
+  CardContent, 
+  ThemeToggle 
+} from '@r-cz/shadcn-ui';
 
 // Lazy load tool components
 const JWTDecoder = lazy(() => import('./tools/JWTDecoder'));
@@ -21,7 +26,7 @@ function App() {
       <Layout>
         <div className="w-full flex justify-between items-center mb-6">
           <div className="flex items-center"> 
-            <WrenchScrewdriverIcon className="h-8 w-8 text-primary-600 mr-2" />
+            <WrenchScrewdriverIcon className="h-8 w-8 text-primary mr-2" />
             <span className="text-xl font-semibold">Developer Tools</span>
           </div>
           <ThemeToggle />
@@ -30,7 +35,7 @@ function App() {
         <Suspense
           fallback={
             <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
           }
         >
@@ -69,11 +74,11 @@ function ToolsList() {
           to={tool.path}
           className="block"
         >
-          <Card variant="bordered" className="h-full hover:shadow-md transition-shadow">
+          <Card className="h-full border hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="text-2xl mb-2">{tool.icon}</div>
               <h3 className="text-lg font-semibold">{tool.name}</h3>
-              <p className="mt-1 text-gray-600 dark:text-gray-300">{tool.description}</p>
+              <p className="mt-1 text-muted-foreground">{tool.description}</p>
             </CardContent>
           </Card>
         </Link>
