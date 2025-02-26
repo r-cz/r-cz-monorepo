@@ -132,4 +132,24 @@ export function JwksResolver({ onJwksResolved }: JwksResolverProps) {
           </Button>
           
           <div className="text-xs text-gray-500 mt-1">
-            <p>JWKS should be a JSON object with
+            <p>JWKS should be a JSON object with a "keys" array containing JWK objects.</p>
+            <p>Example format:</p>
+            <pre className="p-2 bg-gray-100 rounded mt-1 overflow-x-auto">
+{`{
+  "keys": [
+    {
+      "kty": "RSA",
+      "kid": "KEY_ID",
+      "use": "sig",
+      "n": "BASE64_MODULUS",
+      "e": "BASE64_EXPONENT"
+    }
+  ]
+}`}
+            </pre>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

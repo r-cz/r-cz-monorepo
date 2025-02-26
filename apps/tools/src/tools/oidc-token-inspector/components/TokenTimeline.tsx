@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Card } from "@r-cz/ui";
+// Using styled divs instead of components
 
 interface TokenTimelineProps {
   payload: any;
@@ -30,8 +32,8 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
   // If we don't have both iat and exp, we can't create a useful timeline
   if (!issuedAt || !expiration) {
     return (
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <p className="text-yellow-800">
+      <div className="bg-amber-500/10 text-amber-700 p-3 rounded-md">
+        <p>
           Cannot display token timeline. Missing required timestamps (iat and/or exp).
         </p>
       </div>
@@ -136,57 +138,65 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
       </div>
       
       <div className="grid grid-cols-2 gap-4">
-        <div className="border rounded-md p-3">
-          <h4 className="text-sm font-medium">Token Age</h4>
-          <p className="text-2xl font-bold">
-            {formatTimeDiff(issuedAt, now)}
-          </p>
-          <p className="text-xs text-gray-500">
-            {new Date(issuedAt).toLocaleString()}
-          </p>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div className="p-3">
+            <h4 className="text-sm font-medium">Token Age</h4>
+            <p className="text-2xl font-bold">
+              {formatTimeDiff(issuedAt, now)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {new Date(issuedAt).toLocaleString()}
+            </p>
+          </div>
         </div>
         
-        <div className="border rounded-md p-3">
-          <h4 className="text-sm font-medium">Remaining Lifetime</h4>
-          <p className={`text-2xl font-bold ${now > expiration ? 'text-red-500' : ''}`}>
-            {now > expiration 
-              ? 'Expired' 
-              : formatTimeDiff(now, expiration)}
-          </p>
-          <p className="text-xs text-gray-500">
-            {new Date(expiration).toLocaleString()}
-          </p>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div className="p-3">
+            <h4 className="text-sm font-medium">Remaining Lifetime</h4>
+            <p className={`text-2xl font-bold ${now > expiration ? 'text-destructive' : ''}`}>
+              {now > expiration 
+                ? 'Expired' 
+                : formatTimeDiff(now, expiration)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {new Date(expiration).toLocaleString()}
+            </p>
+          </div>
         </div>
         
         {authTime && (
-          <div className="border rounded-md p-3">
-            <h4 className="text-sm font-medium">Authentication Time</h4>
-            <p className="text-lg font-bold">
-              {formatTimeDiff(authTime, now)} ago
-            </p>
-            <p className="text-xs text-gray-500">
-              {new Date(authTime).toLocaleString()}
-            </p>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+            <div className="p-3">
+              <h4 className="text-sm font-medium">Authentication Time</h4>
+              <p className="text-lg font-bold">
+                {formatTimeDiff(authTime, now)} ago
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {new Date(authTime).toLocaleString()}
+              </p>
+            </div>
           </div>
         )}
         
-        <div className="border rounded-md p-3">
-          <h4 className="text-sm font-medium">Total Lifetime</h4>
-          <p className="text-lg font-bold">
-            {formatTimeDiff(issuedAt, expiration)}
-          </p>
-          <p className="text-xs text-gray-500">
-            {Math.round(totalLifetime / 1000)} seconds
-          </p>
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+          <div className="p-3">
+            <h4 className="text-sm font-medium">Total Lifetime</h4>
+            <p className="text-lg font-bold">
+              {formatTimeDiff(issuedAt, expiration)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {Math.round(totalLifetime / 1000)} seconds
+            </p>
+          </div>
         </div>
       </div>
       
       {payload.sid && (
-        <div className="p-3 bg-blue-50 border border-blue-200 rounded">
-          <p className="text-sm">
-            <span className="font-medium">Session ID:</span> {payload.sid}
+        <div className="bg-blue-500/10 text-blue-700 p-3 rounded-md">
+          <p className="text-sm font-medium mb-1">
+            Session ID: <span className="font-mono">{payload.sid}</span>
           </p>
-          <p className="text-xs text-gray-600 mt-1">
+          <p className="text-xs">
             This token is associated with a specific authentication session.
           </p>
         </div>

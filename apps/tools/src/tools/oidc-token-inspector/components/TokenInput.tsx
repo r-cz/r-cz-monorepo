@@ -39,17 +39,17 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <label className="block text-sm font-medium">
+        <label htmlFor="token-input" className="block text-sm font-medium">
           OIDC Token
         </label>
         <div className="flex space-x-2">
           <button
             onClick={handlePaste}
-            className="text-xs text-blue-600 hover:text-blue-800"
+            className="text-xs text-blue-600 hover:underline"
           >
             Paste from Clipboard
           </button>
-          <label className="text-xs text-blue-600 hover:text-blue-800 cursor-pointer">
+          <label className="text-xs text-blue-600 hover:underline cursor-pointer">
             Upload File
             <input
               type="file"
@@ -60,7 +60,7 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
           </label>
           <button
             onClick={handleClear}
-            className="text-xs text-red-600 hover:text-red-800"
+            className="text-xs text-red-600 hover:underline"
           >
             Clear
           </button>
@@ -68,7 +68,8 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
       </div>
       
       <textarea
-        className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-mono"
+        id="token-input"
+        className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono"
         value={token}
         onChange={(e) => setToken(e.target.value)}
         placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -78,7 +79,6 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
         <Button 
           onClick={onDecode}
           disabled={!token}
-          className={!token ? 'opacity-50' : ''}
         >
           Inspect Token
         </Button>
