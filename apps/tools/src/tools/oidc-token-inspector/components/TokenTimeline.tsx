@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Card } from "@r-cz/ui";
+import { Card, Progress } from "@r-cz/ui";
 // Using styled divs instead of components
 
 interface TokenTimelineProps {
@@ -76,14 +76,11 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
     <div className="space-y-6">
       <div className="relative pt-12 pb-4">
         {/* Timeline bar */}
-        <div className="h-2 bg-gray-200 rounded-full relative">
-          {/* Filled portion */}
-          <div 
-            className={`h-full rounded-full ${
-              now > expiration ? 'bg-red-500' : 'bg-blue-500'
-            }`}
-            style={{ width: `${percentElapsed}%` }}
-          ></div>
+        <div className="relative">
+          <Progress 
+            value={percentElapsed} 
+            className={`${now > expiration ? 'bg-red-500' : ''}`}
+          />
           
           {/* Authentication time marker (if present) */}
           {authTime && (
@@ -91,7 +88,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
               className="absolute w-4 h-4 bg-purple-500 rounded-full -mt-1 transform -translate-x-1/2"
               style={{ 
                 left: `${((authTime - issuedAt) / totalLifetime) * 100}%`,
-                top: '0%'
+                top: '-50%'
               }}
               title={`Authentication: ${new Date(authTime).toLocaleString()}`}
             ></div>
@@ -103,7 +100,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
               className="absolute w-4 h-4 bg-yellow-500 rounded-full -mt-1 transform -translate-x-1/2"
               style={{ 
                 left: `${((notBefore - issuedAt) / totalLifetime) * 100}%`,
-                top: '0%'
+                top: '-50%'
               }}
               title={`Not Before: ${new Date(notBefore).toLocaleString()}`}
             ></div>
@@ -114,7 +111,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
             className="absolute w-4 h-4 bg-green-500 rounded-full -mt-1 transform -translate-x-1/2"
             style={{ 
               left: `${Math.min(100, ((now - issuedAt) / totalLifetime) * 100)}%`,
-              top: '0%'
+              top: '-50%'
             }}
             title={`Current Time: ${new Date(now).toLocaleString()}`}
           ></div>

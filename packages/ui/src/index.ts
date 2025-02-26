@@ -8,6 +8,7 @@ export * from "./components/ui/separator";
 export * from "./components/ui/tabs";
 export * from "./components/ui/toggle";
 export * from "./components/ui/tooltip";
+export * from "./components/ui/progress";
 
 // Export layout components
 export * from "./components/layout/theme-provider";
