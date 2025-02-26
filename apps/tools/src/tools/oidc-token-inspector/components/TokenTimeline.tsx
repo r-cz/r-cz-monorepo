@@ -74,7 +74,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
   
   return (
     <div className="space-y-6">
-      <div className="relative pt-10 pb-4">
+      <div className="relative pt-12 pb-4">
         {/* Timeline bar */}
         <div className="h-2 bg-gray-200 rounded-full relative">
           {/* Filled portion */}
@@ -121,16 +121,26 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
           
           {/* Start label */}
           <div 
-            className="absolute -mt-8 transform -translate-x-1/2 text-xs font-mono whitespace-nowrap"
-            style={{ left: '0%' }}
+            className="absolute text-xs font-mono whitespace-nowrap"
+            style={{ 
+              left: '0%',
+              top: '-2rem',
+              textAlign: 'left',
+              transform: 'none' 
+            }}
           >
             Issued: {new Date(issuedAt).toLocaleString()}
           </div>
           
           {/* End label */}
           <div 
-            className="absolute -mt-8 transform -translate-x-1/2 text-xs font-mono whitespace-nowrap"
-            style={{ left: '100%' }}
+            className="absolute text-xs font-mono whitespace-nowrap"
+            style={{ 
+              right: '0%',
+              top: '-2rem',
+              textAlign: 'right',
+              transform: 'none'
+            }}
           >
             Expires: {new Date(expiration).toLocaleString()}
           </div>

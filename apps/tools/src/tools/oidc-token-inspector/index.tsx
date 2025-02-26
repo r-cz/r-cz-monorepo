@@ -51,12 +51,44 @@ export function OidcTokenInspector() {
 
       // Determine token type from payload
       let detectedTokenType: TokenType = "unknown";
-      if (payload.nonce || payload.at_hash || payload.c_hash) {
+      
+      // Log token payload for debugging
+      console.log('Token payload for type detection:', payload);
+      
+      // ID Token detection (more comprehensive checks)
+      if (payload.nonce || payload.at_hash || payload.c_hash || 
+          (payload.aud && payload.sub && payload.iss && payload.exp) || // Standard OpenID claims
+          payload.sid || // Session ID is common in ID tokens
+          (header.typ === 'JWT' && payload.auth_time) // auth_time is typically in ID tokens
+      ) {
+        console.log('Detected as ID Token based on:', { 
+          hasNonce: !!payload.nonce,
+          hasAtHash: !!payload.at_hash, 
+          hasCHash: !!payload.c_hash,
+          hasStandardClaims: !!(payload.aud && payload.sub && payload.iss && payload.exp),
+          hasSid: !!payload.sid,
+          hasAuthTime: !!payload.auth_time
+        });
         detectedTokenType = "id_token";
-      } else if (payload.scope || payload.scp) {
+      } 
+      // Access Token detection
+      else if (payload.scope || payload.scp || 
+               (payload.azp && !payload.nonce) ||
+               payload.client_id ||
+               header.typ === 'at+jwt' || // RFC 9068 format
+               (header.typ === 'JWT' && (payload.authorities || payload.roles || payload.permissions))
+      ) {
+        console.log('Detected as Access Token based on:', { 
+          hasScope: !!payload.scope,
+          hasScp: !!payload.scp,
+          hasAzpWithoutNonce: !!(payload.azp && !payload.nonce),
+          hasClientId: !!payload.client_id,
+          isAtJwt: header.typ === 'at+jwt',
+          hasAuthoritiesRolesPermissions: !!(payload.authorities || payload.roles || payload.permissions)
+        });
         detectedTokenType = "access_token";
-      } else if (payload.azp && !payload.nonce) {
-        detectedTokenType = "access_token";
+      } else {
+        console.log('Could not determine token type from payload. Setting as unknown.');
       }
       
       setTokenType(detectedTokenType);
@@ -142,12 +174,44 @@ export function OidcTokenInspector() {
 
         // Determine token type from payload
         let detectedTokenType: TokenType = "unknown";
-        if (payload.nonce || payload.at_hash || payload.c_hash) {
+        
+        // Log token payload for debugging
+        console.log('Token payload for type detection (in JWKS handler):', payload);
+        
+        // ID Token detection (more comprehensive checks)
+        if (payload.nonce || payload.at_hash || payload.c_hash || 
+            (payload.aud && payload.sub && payload.iss && payload.exp) || // Standard OpenID claims
+            payload.sid || // Session ID is common in ID tokens
+            (header.typ === 'JWT' && payload.auth_time) // auth_time is typically in ID tokens
+        ) {
+          console.log('Detected as ID Token based on:', { 
+            hasNonce: !!payload.nonce,
+            hasAtHash: !!payload.at_hash, 
+            hasCHash: !!payload.c_hash,
+            hasStandardClaims: !!(payload.aud && payload.sub && payload.iss && payload.exp),
+            hasSid: !!payload.sid,
+            hasAuthTime: !!payload.auth_time
+          });
           detectedTokenType = "id_token";
-        } else if (payload.scope || payload.scp) {
+        } 
+        // Access Token detection
+        else if (payload.scope || payload.scp || 
+                 (payload.azp && !payload.nonce) ||
+                 payload.client_id ||
+                 header.typ === 'at+jwt' || // RFC 9068 format
+                 (header.typ === 'JWT' && (payload.authorities || payload.roles || payload.permissions))
+        ) {
+          console.log('Detected as Access Token based on:', { 
+            hasScope: !!payload.scope,
+            hasScp: !!payload.scp,
+            hasAzpWithoutNonce: !!(payload.azp && !payload.nonce),
+            hasClientId: !!payload.client_id,
+            isAtJwt: header.typ === 'at+jwt',
+            hasAuthoritiesRolesPermissions: !!(payload.authorities || payload.roles || payload.permissions)
+          });
           detectedTokenType = "access_token";
-        } else if (payload.azp && !payload.nonce) {
-          detectedTokenType = "access_token";
+        } else {
+          console.log('Could not determine token type from payload. Setting as unknown.');
         }
         
         setTokenType(detectedTokenType);
@@ -252,8 +316,13 @@ export function OidcTokenInspector() {
                   ? "ID Token" 
                   : tokenType === "access_token" 
                     ? "Access Token" 
-                    : "Unknown Token Type"
+                    : <span className="text-amber-500 font-medium">Unknown Token Type</span>
                 }
+                {tokenType === "unknown" && (
+                  <span className="block text-xs text-gray-500 mt-1">
+                    Missing standard claims. Check browser console for details.
+                  </span>
+                )}
               </div>
             </div>
             
