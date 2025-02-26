@@ -104,6 +104,40 @@ const providerSpecificClaims: ProviderSpecificClaim[] = [
     example: "https://lh3.googleusercontent.com/a/...s96-c"
   },
   
+  // PingFederate claims
+  {
+    name: "at_class",
+    description: "Token class or type identifier",
+    provider: "PingFederate",
+    example: "access_token" 
+  },
+  {
+    name: "org_id",
+    description: "Organization identifier",
+    provider: "PingFederate",
+    example: "f1a10068-3a9a-4e9b-98af-bb8f8320f1ae"
+  },
+  {
+    name: "ping_roles", 
+    description: "Roles assigned to the user within PingFederate",
+    provider: "PingFederate",
+    format: "Array of strings",
+    example: "[\"admin\", \"user\", \"api_access\"]"
+  },
+  {
+    name: "sid",
+    description: "Session identifier - links the token to a specific authentication session",
+    provider: "PingFederate",
+    example: "4f41110b468548af8d5c95e9cfd6cbdd"
+  },
+  {
+    name: "amr_values",
+    description: "Authentication Method References - methods used to authenticate the user",
+    provider: "PingFederate",
+    format: "Array of strings",
+    example: "[\"pwd\", \"mfa\", \"otp\"]"
+  },
+  
   // AWS Cognito claims
   {
     name: "cognito:username",
