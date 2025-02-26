@@ -1,0 +1,69 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Root package.json dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*eslint*"
+          - "prettier"
+          - "turbo"
+    versioning-strategy: auto
+
+  # Main app dependencies
+  - package-ecosystem: "npm"
+    directory: "/apps/main"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      next-js:
+        patterns:
+          - "next"
+          - "@next/*"
+    versioning-strategy: auto
+
+  # Tools app dependencies
+  - package-ecosystem: "npm"
+    directory: "/apps/tools"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      next-js:
+        patterns:
+          - "next"
+          - "@next/*"
+    versioning-strategy: auto
+
+  # UI package dependencies
+  - package-ecosystem: "npm"
+    directory: "/packages/ui"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    versioning-strategy: auto
+
+  # Config package dependencies
+  - package-ecosystem: "npm"
+    directory: "/packages/config"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    versioning-strategy: auto
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
