@@ -81,40 +81,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
             value={percentElapsed} 
             className={`${now > expiration ? 'bg-red-500' : ''}`}
           />
-          
-          {/* Authentication time marker (if present) */}
-          {authTime && (
-            <div 
-              className="absolute w-4 h-4 bg-purple-500 rounded-full -mt-1 transform -translate-x-1/2"
-              style={{ 
-                left: `${((authTime - issuedAt) / totalLifetime) * 100}%`,
-                top: '-50%'
-              }}
-              title={`Authentication: ${new Date(authTime).toLocaleString()}`}
-            ></div>
-          )}
-          
-          {/* Not before marker (if present) */}
-          {notBefore && (
-            <div 
-              className="absolute w-4 h-4 bg-yellow-500 rounded-full -mt-1 transform -translate-x-1/2"
-              style={{ 
-                left: `${((notBefore - issuedAt) / totalLifetime) * 100}%`,
-                top: '-50%'
-              }}
-              title={`Not Before: ${new Date(notBefore).toLocaleString()}`}
-            ></div>
-          )}
-          
-          {/* Current time marker */}
-          <div 
-            className="absolute w-4 h-4 bg-green-500 rounded-full -mt-1 transform -translate-x-1/2"
-            style={{ 
-              left: `${Math.min(100, ((now - issuedAt) / totalLifetime) * 100)}%`,
-              top: '-50%'
-            }}
-            title={`Current Time: ${new Date(now).toLocaleString()}`}
-          ></div>
+
           
           {/* Start label */}
           <div 
