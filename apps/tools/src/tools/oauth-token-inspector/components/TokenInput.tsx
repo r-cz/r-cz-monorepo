@@ -40,7 +40,7 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <label htmlFor="token-input" className="block text-sm font-medium">
-          OIDC Token
+          OAuth/OIDC Token
         </label>
         <div className="flex space-x-2">
           <button

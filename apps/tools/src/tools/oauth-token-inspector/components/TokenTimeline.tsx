@@ -165,6 +165,19 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
         </div>
       </div>
       
+      {/* JWT ID Information */}
+      {payload.jti && (
+        <div className="bg-blue-500/10 text-blue-700 p-3 rounded-md">
+          <p className="text-sm font-medium mb-1">
+            JWT ID: <span className="font-mono">{payload.jti}</span>
+          </p>
+          <p className="text-xs">
+            This token has a unique identifier. JWT IDs are particularly important for OAuth access tokens.
+          </p>
+        </div>
+      )}
+      
+      {/* Session ID Information */}
       {payload.sid && (
         <div className="bg-blue-500/10 text-blue-700 p-3 rounded-md">
           <p className="text-sm font-medium mb-1">
@@ -172,6 +185,16 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
           </p>
           <p className="text-xs">
             This token is associated with a specific authentication session.
+          </p>
+        </div>
+      )}
+      
+      {/* OAuth 2.0 Access Token Information */}
+      {(payload.scope || payload.scp || payload.client_id) && !payload.nonce && !payload.at_hash && (
+        <div className="bg-blue-500/10 text-blue-700 p-3 rounded-md">
+          <p className="text-sm font-medium mb-1">OAuth 2.0 Access Token</p>
+          <p className="text-xs">
+            This token contains typical OAuth 2.0 access token claims. It can be used to access protected resources.
           </p>
         </div>
       )}

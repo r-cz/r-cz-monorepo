@@ -1,11 +1,11 @@
 import { ClaimDescription, TokenType } from "../utils/types";
 
 const claimDescriptions: ClaimDescription[] = [
-  // Original claims
+  // JWT claims (RFC 7519) that are also used in OIDC
   {
     name: "iss",
     description: "Issuer Identifier - identifies the principal that issued the token",
-    specification: "OIDC Core",
+    specification: "JWT/RFC7519 & OIDC Core",
     required: true,
     tokenTypes: ["id_token", "access_token", "refresh_token"],
     format: "URL",
@@ -14,7 +14,7 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "sub",
     description: "Subject Identifier - identifies the principal that is the subject of the token",
-    specification: "OIDC Core",
+    specification: "JWT/RFC7519 & OIDC Core",
     required: true,
     tokenTypes: ["id_token", "access_token"],
     example: "24400320"
@@ -22,7 +22,7 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "aud",
     description: "Audience - identifies the recipient(s) for which the token is intended",
-    specification: "OIDC Core",
+    specification: "JWT/RFC7519 & OIDC Core",
     required: true,
     tokenTypes: ["id_token", "access_token"],
     example: "s6BhdRkqt3"
@@ -30,7 +30,7 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "exp",
     description: "Expiration Time - identifies the expiration time of the token",
-    specification: "OIDC Core",
+    specification: "JWT/RFC7519 & OIDC Core",
     required: true,
     tokenTypes: ["id_token", "access_token", "refresh_token"],
     format: "UNIX timestamp",
@@ -39,18 +39,37 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "iat",
     description: "Issued At - identifies the time at which the token was issued",
-    specification: "OIDC Core",
+    specification: "JWT/RFC7519 & OIDC Core",
     required: true,
     tokenTypes: ["id_token", "access_token", "refresh_token"],
     format: "UNIX timestamp",
     example: "1311280970"
   },
   {
+    name: "jti",
+    description: "JWT ID - provides a unique identifier for the token",
+    specification: "JWT/RFC7519",
+    required: false,
+    tokenTypes: ["id_token", "access_token", "refresh_token"],
+    example: "id12342"
+  },
+  {
+    name: "nbf",
+    description: "Not Before - identifies the time before which the token must not be accepted",
+    specification: "JWT/RFC7519",
+    required: false,
+    tokenTypes: ["id_token", "access_token", "refresh_token"],
+    format: "UNIX timestamp",
+    example: "1311280970"
+  },
+  
+  // OIDC Core specific claims
+  {
     name: "auth_time",
     description: "Time when authentication occurred",
     specification: "OIDC Core",
     required: false,
-    tokenTypes: ["id_token"],
+    tokenTypes: ["id_token", "access_token"],
     format: "UNIX timestamp",
     example: "1311280969"
   },
@@ -67,7 +86,7 @@ const claimDescriptions: ClaimDescription[] = [
     description: "Authentication Context Class Reference - level of authentication/assurance",
     specification: "OIDC Core",
     required: false,
-    tokenTypes: ["id_token"],
+    tokenTypes: ["id_token", "access_token"],
     example: "urn:mace:incommon:iap:silver"
   },
   {
@@ -75,7 +94,7 @@ const claimDescriptions: ClaimDescription[] = [
     description: "Authentication Methods References - methods used for authentication",
     specification: "OIDC Core",
     required: false,
-    tokenTypes: ["id_token"],
+    tokenTypes: ["id_token", "access_token"],
     format: "Array of strings",
     example: "[\"pwd\",\"otp\"]"
   },
@@ -103,6 +122,8 @@ const claimDescriptions: ClaimDescription[] = [
     tokenTypes: ["id_token"],
     example: "LDktKdoQak3Pk0cnXxCltA"
   },
+  
+  // OAuth 2.0 Access Token claims
   {
     name: "scope",
     description: "OAuth 2.0 scopes that the client has been granted",
@@ -124,18 +145,10 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "client_id",
     description: "OAuth 2.0 client identifier",
-    specification: "OAuth 2.0",
-    required: false,
+    specification: "OAuth JWT Profile/RFC9068",
+    required: true,
     tokenTypes: ["access_token", "refresh_token"],
     example: "s6BhdRkqt3"
-  },
-  {
-    name: "jti",
-    description: "JWT ID - provides a unique identifier for the token",
-    specification: "JWT",
-    required: false,
-    tokenTypes: ["id_token", "access_token", "refresh_token"],
-    example: "id12342"
   },
   {
     name: "sid",
@@ -145,15 +158,8 @@ const claimDescriptions: ClaimDescription[] = [
     tokenTypes: ["id_token"],
     example: "08a5019c-17e1-4977-8f42-65a12843ea02"
   },
-  {
-    name: "nbf",
-    description: "Not Before - identifies the time before which the token must not be accepted",
-    specification: "JWT",
-    required: false,
-    tokenTypes: ["id_token", "access_token", "refresh_token"],
-    format: "UNIX timestamp",
-    example: "1311280970"
-  },
+  
+  // OIDC Identity Claims
   {
     name: "name",
     description: "End-User's full name",
@@ -195,8 +201,6 @@ const claimDescriptions: ClaimDescription[] = [
     format: "Boolean",
     example: "true"
   },
-
-  // New claims from IANA registry
   {
     name: "middle_name",
     description: "End-User's middle name(s)",
@@ -327,6 +331,8 @@ const claimDescriptions: ClaimDescription[] = [
     format: "JWK",
     example: "{ \"kty\": \"RSA\", \"n\": \"...\", \"e\": \"AQAB\" }"
   },
+  
+  // Other specifications
   {
     name: "cnf",
     description: "Confirmation - contains members that confirm the keys",
@@ -397,10 +403,12 @@ const claimDescriptions: ClaimDescription[] = [
     format: "JSON object",
     example: "{ \"sub\": \"agent123\" }"
   },
+  
+  // RFC 9068 Claims (OAuth JWT Profile for Access Tokens)
   {
     name: "roles",
     description: "Roles assigned to the subject",
-    specification: "RFC 9068",
+    specification: "OAuth JWT Profile/RFC9068",
     required: false,
     tokenTypes: ["access_token"],
     format: "Array of strings",
@@ -409,7 +417,7 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "groups",
     description: "Groups that the subject belongs to",
-    specification: "RFC 9068",
+    specification: "OAuth JWT Profile/RFC9068",
     required: false,
     tokenTypes: ["access_token", "id_token"],
     format: "Array of strings",
@@ -418,7 +426,7 @@ const claimDescriptions: ClaimDescription[] = [
   {
     name: "entitlements",
     description: "Entitlements granted to the subject",
-    specification: "RFC 9068",
+    specification: "OAuth JWT Profile/RFC9068",
     required: false,
     tokenTypes: ["access_token"],
     format: "Array of strings",

@@ -20,10 +20,13 @@ export function TokenPayload({
 }: TokenPayloadProps) {
   const [showAll, setShowAll] = useState(false);
   
-  // Common OIDC claims to show first
-  const standardClaims = [
+  // Claims to show first based on token type
+  const standardClaims = tokenType === "id_token" ? [
     "iss", "sub", "aud", "exp", "iat", "auth_time", "nonce",
     "acr", "amr", "azp", "at_hash", "c_hash"
+  ] : [
+    "iss", "sub", "aud", "exp", "iat", "client_id", "jti", 
+    "scope", "scp", "roles", "groups", "entitlements"
   ];
   
   // Map to track which claims have validation results
@@ -135,7 +138,12 @@ export function TokenPayload({
                   {claimDescription.specification} 
                   {claimDescription.required && tokenType === "id_token" && 
                     " (Required for ID tokens)"}
+                  {claimDescription.required && tokenType === "access_token" && claimDescription.specification.includes("RFC9068") && 
+                    " (Required for RFC9068 JWT access tokens)"}
                 </p>
+                {claimDescription.specification.includes("RFC9068") && tokenType === "access_token" && (
+                  <p className="mt-1 text-xs text-blue-600">This claim is defined in the JWT Profile for OAuth 2.0 Access Tokens (RFC9068)</p>
+                )}
               </>
             )}
             
@@ -177,7 +185,7 @@ export function TokenPayload({
       </div>
       
       <div className="space-y-3">
-        <h3 className="text-md font-medium">Common OIDC Claims</h3>
+        <h3 className="text-md font-medium">{tokenType === "id_token" ? "Common OIDC Claims" : "Common OAuth/JWT Claims"}</h3>
         
         <div className="grid grid-cols-1 gap-3">
           {commonClaims.map(key => renderClaim(key, payload[key]))}

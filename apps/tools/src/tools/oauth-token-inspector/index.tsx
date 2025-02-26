@@ -17,10 +17,10 @@ import { TokenHeader } from "./components/TokenHeader";
 import { TokenPayload } from "./components/TokenPayload";
 import { TokenSignature } from "./components/TokenSignature";
 import { TokenTimeline } from "./components/TokenTimeline";
-import { validateOidcToken } from "./utils/oidc-validation";
+import { validateToken, determineTokenType } from "./utils/token-validation";
 import { TokenType, DecodedToken, ValidationResult } from "./utils/types";
 
-export function OidcTokenInspector() {
+export function TokenInspector() {
   const [token, setToken] = useState("");
   const [jwks, setJwks] = useState<jose.JSONWebKeySet | null>(null);
   const [decodedToken, setDecodedToken] = useState<DecodedToken | null>(null);
@@ -49,52 +49,14 @@ export function OidcTokenInspector() {
         Buffer.from(encodedPayload, "base64").toString()
       );
 
-      // Determine token type from payload
-      let detectedTokenType: TokenType = "unknown";
-      
-      // Log token payload for debugging
-      console.log('Token payload for type detection:', payload);
-      
-      // ID Token detection (more comprehensive checks)
-      if (payload.nonce || payload.at_hash || payload.c_hash || 
-          (payload.aud && payload.sub && payload.iss && payload.exp) || // Standard OpenID claims
-          payload.sid || // Session ID is common in ID tokens
-          (header.typ === 'JWT' && payload.auth_time) // auth_time is typically in ID tokens
-      ) {
-        console.log('Detected as ID Token based on:', { 
-          hasNonce: !!payload.nonce,
-          hasAtHash: !!payload.at_hash, 
-          hasCHash: !!payload.c_hash,
-          hasStandardClaims: !!(payload.aud && payload.sub && payload.iss && payload.exp),
-          hasSid: !!payload.sid,
-          hasAuthTime: !!payload.auth_time
-        });
-        detectedTokenType = "id_token";
-      } 
-      // Access Token detection
-      else if (payload.scope || payload.scp || 
-               (payload.azp && !payload.nonce) ||
-               payload.client_id ||
-               header.typ === 'at+jwt' || // RFC 9068 format
-               (header.typ === 'JWT' && (payload.authorities || payload.roles || payload.permissions))
-      ) {
-        console.log('Detected as Access Token based on:', { 
-          hasScope: !!payload.scope,
-          hasScp: !!payload.scp,
-          hasAzpWithoutNonce: !!(payload.azp && !payload.nonce),
-          hasClientId: !!payload.client_id,
-          isAtJwt: header.typ === 'at+jwt',
-          hasAuthoritiesRolesPermissions: !!(payload.authorities || payload.roles || payload.permissions)
-        });
-        detectedTokenType = "access_token";
-      } else {
-        console.log('Could not determine token type from payload. Setting as unknown.');
-      }
+      // Use the new determineTokenType function
+      const detectedTokenType = determineTokenType(header, payload);
+      console.log('Detected token type:', detectedTokenType);
       
       setTokenType(detectedTokenType);
 
-      // Perform validation
-      const validationResults = validateOidcToken(header, payload, detectedTokenType);
+      // Perform validation using the new validation function
+      const validationResults = validateToken(header, payload, detectedTokenType);
 
       let signatureValid = false;
       let signatureError = undefined;
@@ -217,7 +179,7 @@ export function OidcTokenInspector() {
         setTokenType(detectedTokenType);
 
         // Perform validation
-        const validationResults = validateOidcToken(header, payload, detectedTokenType);
+        const validationResults = validateToken(header, payload, detectedTokenType);
 
         let signatureValid = false;
         let signatureError = undefined;
@@ -312,15 +274,17 @@ export function OidcTokenInspector() {
                 </span>
               </div>
               <div className="text-sm font-medium">
-                Detected: {tokenType === "id_token" 
-                  ? "ID Token" 
-                  : tokenType === "access_token" 
-                    ? "Access Token" 
-                    : <span className="text-amber-500 font-medium">Unknown Token Type</span>
-                }
-                {tokenType === "unknown" && (
-                  <span className="block text-xs text-gray-500 mt-1">
-                    Missing standard claims. Check browser console for details.
+              Detected: {tokenType === "id_token" 
+              ? "OIDC ID Token" 
+              : tokenType === "access_token" 
+              ? decodedToken.header.typ === "at+jwt" || decodedToken.header.typ === "application/at+jwt"
+                ? "OAuth JWT Access Token (RFC9068)" 
+                    : "OAuth Access Token"
+                  : <span className="text-amber-500 font-medium">Unknown Token Type</span>
+              }
+              {tokenType === "unknown" && (
+              <span className="block text-xs text-gray-500 mt-1">
+                  Missing standard claims. Check browser console for details.
                   </span>
                 )}
               </div>
@@ -337,9 +301,7 @@ export function OidcTokenInspector() {
                 <TabsTrigger value="header">Header</TabsTrigger>
                 <TabsTrigger value="payload">Payload</TabsTrigger>
                 <TabsTrigger value="signature">Signature</TabsTrigger>
-                {tokenType === "id_token" && (
-                  <TabsTrigger value="timeline">Timeline</TabsTrigger>
-                )}
+                <TabsTrigger value="timeline">Timeline</TabsTrigger>
               </TabsList>
               
               <TabsContent value="header">
@@ -367,11 +329,9 @@ export function OidcTokenInspector() {
                 />
               </TabsContent>
               
-              {tokenType === "id_token" && (
-                <TabsContent value="timeline">
-                  <TokenTimeline payload={decodedToken.payload} />
-                </TabsContent>
-              )}
+              <TabsContent value="timeline">
+                <TokenTimeline payload={decodedToken.payload} />
+              </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
