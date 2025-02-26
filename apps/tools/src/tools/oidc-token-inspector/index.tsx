@@ -110,7 +110,7 @@ export function OidcTokenInspector() {
           console.log('Verifying token signature with JWKS:', { 
             tokenKid: header.kid,
             jwksKeyCount: jwks.keys.length,
-            jwksKeys: jwks.keys.map(k => k.kid)
+            jwksKeys: jwks.keys.map((k: {kid?: string}) => k.kid)
           });
           
           await jose.jwtVerify(token, keystore);
@@ -232,7 +232,7 @@ export function OidcTokenInspector() {
           console.log('Verifying token signature with newly resolved JWKS:', { 
             tokenKid: header.kid,
             jwksKeyCount: resolvedJwks.keys.length,
-            jwksKeys: resolvedJwks.keys.map(k => k.kid)
+            jwksKeys: resolvedJwks.keys.map((k: {kid?: string}) => k.kid)
           });
           
           await jose.jwtVerify(token, keystore);

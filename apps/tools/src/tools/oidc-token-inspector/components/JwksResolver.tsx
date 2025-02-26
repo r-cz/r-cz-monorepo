@@ -101,7 +101,7 @@ export function JwksResolver({
       
       console.log('Manual JWKS parsed successfully:', {
         keyCount: parsedJwks.keys.length,
-        keyIds: parsedJwks.keys.map(k => k.kid)
+        keyIds: parsedJwks.keys.map((k: {kid?: string}) => k.kid)
       });
       
       onJwksResolved(parsedJwks);
