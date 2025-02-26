@@ -2,9 +2,20 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "tasks": {
+    "@r-cz/config#build": {
+      "cache": true,
+      "inputs": [],
+      "outputs": []
+    },
+    "@r-cz/ui#build": {
+      "cache": true,
+      "inputs": [],
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "inputs": ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js", "**/*.json", "!node_modules"]
     },
     "lint": {},
     "dev": {
