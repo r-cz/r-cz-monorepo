@@ -21,6 +21,12 @@ export default function Home() {
       description: "Live preview for Mermaid diagrams",
       path: "/mermaid",
       icon: "🧜‍♀️"
+    },
+    {
+      name: "OIDC Token Inspector",
+      description: "Inspect and validate OpenID Connect tokens with detailed validation",
+      path: "/oidc",
+      icon: "🔍"
     }
   ];
 
