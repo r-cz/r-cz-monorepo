@@ -1,0 +1,71 @@
+/* PrismJS Minimal Theme for JSON */
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  tab-size: 2;
+}
+
+/* JSON specific styles */
+.token.property {
+  color: #569cd6;
+}
+
+.token.string {
+  color: #ce9178;
+}
+
+.token.number {
+  color: #b5cea8;
+}
+
+.token.boolean {
+  color: #569cd6;
+}
+
+.token.null {
+  color: #569cd6;
+}
+
+.token.punctuation {
+  color: #d4d4d4;
+}
+
+.token.operator {
+  color: #d4d4d4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .token.property {
+    color: #9cdcfe;
+  }
+  
+  .token.string {
+    color: #ce9178;
+  }
+  
+  .token.number {
+    color: #b5cea8;
+  }
+  
+  .token.boolean {
+    color: #569cd6;
+  }
+  
+  .token.null {
+    color: #569cd6;
+  }
+  
+  .token.punctuation {
+    color: #d4d4d4;
+  }
+  
+  .token.operator {
+    color: #d4d4d4;
+  }
+}

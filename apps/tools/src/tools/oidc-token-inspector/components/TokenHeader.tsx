@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ValidationResult } from "../utils/types";
-import { Card } from "@r-cz/ui";
+import { Card, CodeBlock } from "@r-cz/ui";
 // Using styled divs instead of shadcn components
 
 interface TokenHeaderProps {
@@ -38,9 +38,7 @@ export function TokenHeader({ header, validationResults }: TokenHeaderProps) {
     <div className="space-y-4">
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
         <div className="p-4">
-          <pre className="p-3 block overflow-x-auto whitespace-pre-wrap font-mono bg-muted rounded-md">
-            {JSON.stringify(header, null, 2)}
-          </pre>
+          <CodeBlock code={JSON.stringify(header, null, 2)} language="json" />
         </div>
       </div>
       

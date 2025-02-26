@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { ValidationResult, TokenType } from "../utils/types";
 import { getClaimDescription } from "../data/claim-descriptions";
 import { getProviderSpecificClaimInfo } from "../data/provider-claims";
-import { Button, Card, CardContent } from "@r-cz/ui";
+import { Button, Card, CardContent, CodeBlock } from "@r-cz/ui";
 // Using styled div instead of Badge, Alert, and Code
 
 interface TokenPayloadProps {
@@ -58,9 +58,7 @@ export function TokenPayload({
     // Handle arrays and objects
     if (typeof value === "object" && value !== null) {
       return (
-        <pre className="p-1 block overflow-x-auto bg-muted rounded-md font-mono text-sm">
-          {JSON.stringify(value, null, 2)}
-        </pre>
+        <CodeBlock code={JSON.stringify(value, null, 2)} language="json" className="p-1" />
       );
     }
     
@@ -174,9 +172,7 @@ export function TokenPayload({
     <div className="space-y-4">
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
         <div className="p-4">
-          <pre className="p-3 block overflow-x-auto whitespace-pre-wrap font-mono bg-muted rounded-md">
-            {JSON.stringify(payload, null, 2)}
-          </pre>
+          <CodeBlock code={JSON.stringify(payload, null, 2)} language="json" />
         </div>
       </div>
       
