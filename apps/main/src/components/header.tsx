@@ -12,10 +12,9 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@r-cz/ui";
-import { Menu, Mail, FileText, Linkedin, ExternalLink } from "lucide-react";
+import { Mail, FileText, Linkedin, ExternalLink } from "lucide-react";
 
 export function Header() {
-  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -59,15 +58,6 @@ export function Header() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle menu</span>
-          </Button>
         </div>
       </div>
     </header>
