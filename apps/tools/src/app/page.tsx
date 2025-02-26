@@ -11,22 +11,16 @@ interface Tool {
 export default function Home() {
   const tools: Tool[] = [
     {
-      name: "JWT Decoder",
-      description: "Decode and verify JWT tokens with ease",
-      path: "/jwt",
-      icon: "🔑"
+      name: "OIDC Token Inspector",
+      description: "Inspect and validate OpenID Connect tokens with detailed validation",
+      path: "/oidc",
+      icon: "🔍"
     },
     {
       name: "Mermaid Viewer",
       description: "Live preview for Mermaid diagrams",
       path: "/mermaid",
       icon: "🧜‍♀️"
-    },
-    {
-      name: "OIDC Token Inspector",
-      description: "Inspect and validate OpenID Connect tokens with detailed validation",
-      path: "/oidc",
-      icon: "🔍"
     }
   ];
 
