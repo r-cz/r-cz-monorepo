@@ -74,9 +74,17 @@ export function OidcTokenInspector() {
             new URL(`data:application/json;base64,${Buffer.from(JSON.stringify(jwks)).toString('base64')}`)
           );
           
+          // Add logging to help with debugging
+          console.log('Verifying token signature with JWKS:', { 
+            tokenKid: header.kid,
+            jwksKeyCount: jwks.keys.length,
+            jwksKeys: jwks.keys.map(k => k.kid)
+          });
+          
           await jose.jwtVerify(token, keystore);
           signatureValid = true;
         } catch (e: any) {
+          console.error('Signature verification error:', e);
           signatureError = e.message;
         }
       }
@@ -112,11 +120,88 @@ export function OidcTokenInspector() {
     }
   };
 
-  const handleJwksResolved = (resolvedJwks: jose.JSONWebKeySet) => {
+  const handleJwksResolved = async (resolvedJwks: jose.JSONWebKeySet) => {
     setJwks(resolvedJwks);
+    
     // Re-decode token with new JWKS if token is already decoded
-    if (decodedToken) {
-      decodeToken();
+    if (decodedToken && token) {
+      // Use the new JWKS directly instead of relying on state update
+      try {
+        const parts = token.split(".");
+        if (parts.length !== 3) {
+          throw new Error("Invalid JWT format");
+        }
+
+        const [encodedHeader, encodedPayload] = parts;
+        const header = JSON.parse(
+          Buffer.from(encodedHeader, "base64").toString()
+        );
+        const payload = JSON.parse(
+          Buffer.from(encodedPayload, "base64").toString()
+        );
+
+        // Determine token type from payload
+        let detectedTokenType: TokenType = "unknown";
+        if (payload.nonce || payload.at_hash || payload.c_hash) {
+          detectedTokenType = "id_token";
+        } else if (payload.scope || payload.scp) {
+          detectedTokenType = "access_token";
+        } else if (payload.azp && !payload.nonce) {
+          detectedTokenType = "access_token";
+        }
+        
+        setTokenType(detectedTokenType);
+
+        // Perform validation
+        const validationResults = validateOidcToken(header, payload, detectedTokenType);
+
+        let signatureValid = false;
+        let signatureError = undefined;
+
+        // Verify signature with the new JWKS
+        try {
+          const keystore = jose.createRemoteJWKSet(
+            new URL(`data:application/json;base64,${Buffer.from(JSON.stringify(resolvedJwks)).toString('base64')}`)
+          );
+          
+          // Add logging to help with debugging
+          console.log('Verifying token signature with newly resolved JWKS:', { 
+            tokenKid: header.kid,
+            jwksKeyCount: resolvedJwks.keys.length,
+            jwksKeys: resolvedJwks.keys.map(k => k.kid)
+          });
+          
+          await jose.jwtVerify(token, keystore);
+          signatureValid = true;
+          console.log('Token signature verification successful');
+        } catch (e: any) {
+          console.error('Signature verification error with newly resolved JWKS:', e);
+          signatureError = e.message;
+        }
+
+        setDecodedToken({
+          header,
+          payload,
+          signature: {
+            valid: signatureValid,
+            error: signatureError
+          },
+          raw: token
+        });
+
+        setValidationResults(validationResults);
+      } catch (err: any) {
+        // Handle errors
+        setDecodedToken({
+          header: decodedToken.header,
+          payload: decodedToken.payload,
+          signature: {
+            valid: false,
+            error: err.message
+          },
+          raw: token
+        });
+      }
     }
   };
 

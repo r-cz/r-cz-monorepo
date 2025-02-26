@@ -84,15 +84,30 @@ export function JwksResolver({
   
   const handleManualJwksSubmit = () => {
     try {
-      const parsedJwks = JSON.parse(manualJwks);
+      // Trim whitespace to prevent JSON parse errors
+      const trimmedJwks = manualJwks.trim();
+      const parsedJwks = JSON.parse(trimmedJwks);
       
       if (!parsedJwks.keys || !Array.isArray(parsedJwks.keys)) {
         throw new Error("Invalid JWKS format: missing 'keys' array");
       }
       
+      // Validate that all keys have mandatory JWK properties
+      for (const key of parsedJwks.keys) {
+        if (!key.kty) {
+          throw new Error("Invalid key in JWKS: missing 'kty' property");
+        }
+      }
+      
+      console.log('Manual JWKS parsed successfully:', {
+        keyCount: parsedJwks.keys.length,
+        keyIds: parsedJwks.keys.map(k => k.kid)
+      });
+      
       onJwksResolved(parsedJwks);
       setError(null);
     } catch (err: any) {
+      console.error('Error parsing manual JWKS:', err);
       setError({
         message: `Invalid JWKS JSON: ${err.message}`,
         isCors: false
