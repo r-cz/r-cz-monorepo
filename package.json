@@ -12,7 +12,10 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "cf-build-main": "cd apps/main && bun run build",
-    "cf-build-tools": "cd apps/tools && bun run build"
+    "cf-build-tools": "cd apps/tools && bun run build",
+    "clean": "bun ./scripts/clean.js",
+    "clean:dry": "bun ./scripts/clean.js --dry-run",
+    "clean:force": "bun ./scripts/clean.js --force"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.9",
