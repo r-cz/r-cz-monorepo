@@ -74,11 +74,33 @@ bun --cwd apps/main build
 bun --cwd apps/tools build
 ```
 
+## Clean
+
+You can clean all build artifacts, node_modules, and cache directories using the clean script:
+
+```bash
+# Regular clean with confirmation prompt
+bun clean
+
+# Preview what would be cleaned (dry run)
+bun clean:dry
+
+# Clean without confirmation
+bun clean:force
+```
+
+The clean script removes:
+- All node_modules directories
+- .next build directories
+- out directories (Next.js exports)
+- dist directories (in packages)
+- .turbo cache directory
+
 ## Deployment
 
 This project is deployed to Cloudflare Pages using Cloudflare's GitHub integration. Each site is deployed as a separate Cloudflare Pages project but they share the same GitHub repository.
 
-See `CLOUDFLARE_DEPLOYMENT.md` for detailed deployment instructions.
+Deployment is handled via Cloudflare Pages with build watch paths configured in the Cloudflare dashboard.
 
 ## Adding a New UI Component
 
