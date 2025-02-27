@@ -5,6 +5,7 @@ This directory contains automated tests for both ryancruz.com and tools.ryancruz
 ## Test Structure
 
 - `main/` - Tests for the main site (ryancruz.com)
+  - `main-site.spec.ts` - Consolidated main site tests (page loading, navigation, theme switching)
 - `tools/` - Tests for the tools site (tools.ryancruz.com)
 - `utils/` - Shared test utilities and helpers
 
@@ -77,3 +78,5 @@ Future enhancements to consider:
 3. **Accessibility Tests**: Add tests that check for accessibility issues.
 
 4. **Performance Tests**: Add tests that measure page load times and performance metrics.
+
+5. **Consolidate Tools Tests**: Consider consolidating the tools site tests like we did for the main site tests, to reduce duplication and improve maintainability.
