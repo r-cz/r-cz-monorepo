@@ -7,21 +7,33 @@ node_modules
 
 # testing
 coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests-examples/
 
 # next.js
 .next/
 out/
 build
 dist
+.swc/
 
 # misc
 .DS_Store
 *.pem
+.env
+.env.*
+!.env.example
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
+log
+logs
 
 # local env files
 .env.local
@@ -29,8 +41,23 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.project
+.classpath
+*.launch
+.settings/
+
 # turbo
 .turbo
 
 # Bun lockfile
 bun.lockb
+
+# vercel
+.vercel
