@@ -13,11 +13,20 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "cf-build-main": "cd apps/main && bun run build",
     "cf-build-tools": "cd apps/tools && bun run build",
+    "test": "bunx playwright test tests/main/main-site.spec.ts tests/tools/tools-site.spec.ts tests/tools/mermaid.spec.ts tests/tools/token-inspector.spec.ts",
+    "test:main": "bunx playwright test tests/main/main-site.spec.ts",
+    "test:tools": "bunx playwright test tests/tools/tools-site.spec.ts tests/tools/mermaid.spec.ts tests/tools/token-inspector.spec.ts",
+    "test:ui": "bunx playwright test --ui",
+    "test:theme": "bunx playwright test tests/main/main-site.spec.ts:32 tests/tools/tools-site.spec.ts:33",
+    "test:generate-report": "bunx playwright show-report",
     "clean": "bun ./scripts/clean.js",
     "clean:dry": "bun ./scripts/clean.js --dry-run",
-    "clean:force": "bun ./scripts/clean.js --force"
+    "clean:force": "bun ./scripts/clean.js --force",
+    "clean:test": "bun ./scripts/clean.js --test-only --force",
+    "clean:test:dry": "bun ./scripts/clean.js --test-only --dry-run"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.1",
     "@tailwindcss/postcss": "^4.0.9",
     "eslint": "^8.57.1",
     "prettier": "^3.5.2",
