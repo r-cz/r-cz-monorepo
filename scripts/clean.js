@@ -2,7 +2,14 @@
 
 /**
  * Clean script for r-cz-monorepo
- * Removes build artifacts, caches, and node_modules
+ * Removes build artifacts, caches, node_modules, and test results
+ * 
+ * Usage: 
+ *   bun clean           - Interactive mode (asks for confirmation)
+ *   bun clean:dry       - Dry run (shows what would be deleted)
+ *   bun clean:force     - Force deletion without confirmation
+ *   bun clean:test      - Clean only Playwright test artifacts
+ *   bun clean:test:dry  - Dry run for test artifacts only
  */
 
 import { existsSync } from 'node:fs';
@@ -14,6 +21,7 @@ import { readdir } from 'node:fs/promises';
 const DRY_RUN = process.argv.includes('--dry-run');
 const FORCE = process.argv.includes('--force');
 const HELP = process.argv.includes('--help') || process.argv.includes('-h');
+const TEST_ONLY = process.argv.includes('--test-only');
 
 // Help text
 if (HELP) {
@@ -25,6 +33,7 @@ Usage: bun run clean [options]
 Options:
   --dry-run     Show what would be deleted without actually deleting
   --force       Skip confirmation prompt
+  --test-only   Clean only Playwright test artifacts
   --help, -h    Show this help message
 
 This script removes:
@@ -33,19 +42,36 @@ This script removes:
   - out directories (Next.js export)
   - dist directories (in packages)
   - .turbo cache directory
+  - Playwright test results and reports
   `);
   process.exit(0);
 }
 
 // Paths to clean
 const ROOT_DIR = resolve(process.cwd());
-const PATHS_TO_CLEAN = [
-  join(ROOT_DIR, 'node_modules'),
-  join(ROOT_DIR, '.turbo'),
+
+// Define Playwright test directories
+const PLAYWRIGHT_DIRS = [
+  join(ROOT_DIR, 'test-results'),
+  join(ROOT_DIR, 'playwright-report'),
+  join(ROOT_DIR, 'blob-report'),
+  join(ROOT_DIR, 'playwright/.cache')
 ];
+const PATHS_TO_CLEAN = TEST_ONLY 
+  ? [...PLAYWRIGHT_DIRS] // Only include Playwright dirs in test-only mode
+  : [
+      join(ROOT_DIR, 'node_modules'),
+      join(ROOT_DIR, '.turbo'),
+      ...PLAYWRIGHT_DIRS
+    ];
 
 // Find all apps and packages directories
 async function findDirectories() {
+  // If test-only mode, we've already defined all paths
+  if (TEST_ONLY) {
+    return PATHS_TO_CLEAN.filter(path => existsSync(path));
+  }
+
   // Add apps/*/{node_modules,.next,out}
   if (existsSync(join(ROOT_DIR, 'apps'))) {
     const appDirs = await readdir(join(ROOT_DIR, 'apps'));
@@ -73,6 +99,10 @@ async function findDirectories() {
 
 // Print what will be deleted
 async function printSummary(paths) {
+  if (TEST_ONLY) {
+    console.log('\nTest-only mode: Cleaning only Playwright test directories');
+  }
+
   console.log('\nThe following directories will be deleted:');
   console.log('----------------------------------------');
   
@@ -134,7 +164,12 @@ function cleanDirectories(paths) {
   });
   
   console.log('\n🧹 Clean completed successfully!');
-  console.log('Run "bun install" to reinstall dependencies.');
+  
+  if (TEST_ONLY) {
+    console.log('All test reports and results have been cleaned.');
+  } else {
+    console.log('Run "bun install" to reinstall dependencies.');
+  }
 }
 
 // Main function

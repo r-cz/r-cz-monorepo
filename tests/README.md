@@ -7,6 +7,9 @@ This directory contains automated tests for both ryancruz.com and tools.ryancruz
 - `main/` - Tests for the main site (ryancruz.com)
   - `main-site.spec.ts` - Consolidated main site tests (page loading, navigation, theme switching)
 - `tools/` - Tests for the tools site (tools.ryancruz.com)
+  - `tools-site.spec.ts` - Consolidated tools site tests (page loading, navigation, theme switching)
+  - `mermaid.spec.ts` - Tests for the Mermaid diagram tool
+  - `token-inspector.spec.ts` - Tests for the JWT token inspector tool
 - `utils/` - Shared test utilities and helpers
 
 ## Running Tests
@@ -24,6 +27,12 @@ bun run test:ui
 
 # View test reports
 bun run test:generate-report
+
+# Clean up test results and reports
+bun run clean:test
+
+# Preview what test files would be cleaned (dry run)
+bun run clean:test:dry
 ```
 
 ## Test Strategy
@@ -78,5 +87,3 @@ Future enhancements to consider:
 3. **Accessibility Tests**: Add tests that check for accessibility issues.
 
 4. **Performance Tests**: Add tests that measure page load times and performance metrics.
-
-5. **Consolidate Tools Tests**: Consider consolidating the tools site tests like we did for the main site tests, to reduce duplication and improve maintainability.
