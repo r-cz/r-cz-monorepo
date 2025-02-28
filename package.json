@@ -10,6 +10,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "update-all": "turbo run update-deps --parallel",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "cf-build-main": "cd apps/main && bun run build",
     "cf-build-tools": "cd apps/tools && bun run build",

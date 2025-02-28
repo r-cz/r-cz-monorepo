@@ -6,7 +6,8 @@
   "types": "./src/index.ts",
   "scripts": {
     "lint": "eslint \"**/*.ts*\"",
-    "build": "echo 'No build needed for UI package'"
+    "build": "echo 'No build needed for UI package'",
+    "update-deps": "bun update --latest"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",

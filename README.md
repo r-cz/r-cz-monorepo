@@ -74,6 +74,16 @@ bun --cwd apps/main build
 bun --cwd apps/tools build
 ```
 
+## Updating Dependencies
+
+To update dependencies across all packages in the monorepo:
+
+```bash
+bun run update-all
+```
+
+This command uses Turborepo to run `bun update --latest` in parallel across all workspaces, ensuring all package.json files are updated consistently.
+
 ## Clean
 
 You can clean all build artifacts, node_modules, and cache directories using the clean script:
