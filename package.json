@@ -33,7 +33,7 @@
     "prettier": "^3.5.2",
     "turbo": "^2.4.4"
   },
-  "packageManager": "bun@1.2.3",
+  "packageManager": "bun@1.2.4",
   "engines": {
     "node": ">=18.0.0"
   }
