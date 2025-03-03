@@ -41,7 +41,7 @@ This script removes:
   - .next build directories
   - out directories (Next.js export)
   - dist directories (in packages)
-  - .turbo cache directory
+  - .turbo cache directories (root and in apps/packages)
   - Playwright test results and reports
   `);
   process.exit(0);
@@ -72,7 +72,7 @@ async function findDirectories() {
     return PATHS_TO_CLEAN.filter(path => existsSync(path));
   }
 
-  // Add apps/*/{node_modules,.next,out}
+  // Add apps/*/{node_modules,.next,out,.turbo}
   if (existsSync(join(ROOT_DIR, 'apps'))) {
     const appDirs = await readdir(join(ROOT_DIR, 'apps'));
     for (const app of appDirs) {
@@ -80,16 +80,18 @@ async function findDirectories() {
       PATHS_TO_CLEAN.push(join(ROOT_DIR, 'apps', app, 'node_modules'));
       PATHS_TO_CLEAN.push(join(ROOT_DIR, 'apps', app, '.next'));
       PATHS_TO_CLEAN.push(join(ROOT_DIR, 'apps', app, 'out'));
+      PATHS_TO_CLEAN.push(join(ROOT_DIR, 'apps', app, '.turbo'));
     }
   }
 
-  // Add packages/*/{node_modules,dist}
+  // Add packages/*/{node_modules,dist,.turbo}
   if (existsSync(join(ROOT_DIR, 'packages'))) {
     const packageDirs = await readdir(join(ROOT_DIR, 'packages'));
     for (const pkg of packageDirs) {
       if (pkg.startsWith('.')) continue;
       PATHS_TO_CLEAN.push(join(ROOT_DIR, 'packages', pkg, 'node_modules'));
       PATHS_TO_CLEAN.push(join(ROOT_DIR, 'packages', pkg, 'dist'));
+      PATHS_TO_CLEAN.push(join(ROOT_DIR, 'packages', pkg, '.turbo'));
     }
   }
 
