@@ -24,12 +24,11 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
         
         diagramRef.current.innerHTML = '';
         
-        // Use the callback pattern for render
-        await mermaid.render('mermaid-diagram', code, (svgCode: string) => {
-          if (diagramRef.current) {
-            diagramRef.current.innerHTML = svgCode;
-          }
-        });
+        // Use the new render API pattern
+        const { svg } = await mermaid.render('mermaid-diagram', code, diagramRef.current);
+        if (diagramRef.current) {
+          diagramRef.current.innerHTML = svg;
+        }
       } catch (err: any) {
         console.error(err);
         onError(err.message || 'Failed to render diagram');
