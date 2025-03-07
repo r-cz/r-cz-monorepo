@@ -1,8 +1,15 @@
 import "@/styles/globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ThemeProvider } from "@r-cz/ui";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#121826" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tools.ryancruz.com"),
