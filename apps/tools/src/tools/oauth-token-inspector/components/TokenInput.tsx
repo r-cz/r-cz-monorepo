@@ -75,6 +75,14 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
         placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
       />
       
+      {token && (
+        <div className="flex justify-end mt-1">
+          <div className="text-xs text-muted-foreground">
+            Characters: {token.length}
+          </div>
+        </div>
+      )}
+      
       <div className="flex justify-end">
         <Button 
           onClick={onDecode}

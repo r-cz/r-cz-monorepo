@@ -21,7 +21,13 @@ export function TokenSignature({
   jwks 
 }: TokenSignatureProps) {
   const parts = token.split('.');
+  const headerPart = parts.length >= 1 ? parts[0] : '';
+  const payloadPart = parts.length >= 2 ? parts[1] : '';
   const signaturePart = parts.length === 3 ? parts[2] : '';
+  
+
+  
+
   
   const matchingKey = jwks?.keys.find(key => key.kid === header.kid);
   
@@ -67,6 +73,7 @@ export function TokenSignature({
           
           <hr className="h-px my-4 bg-border" />
           
+
           <div>
             <h4 className="text-sm font-medium mb-1">Raw Signature:</h4>
             <pre className="p-2 block overflow-x-auto text-xs bg-muted rounded-md font-mono">

@@ -17,6 +17,7 @@ import { TokenHeader } from "./components/TokenHeader";
 import { TokenPayload } from "./components/TokenPayload";
 import { TokenSignature } from "./components/TokenSignature";
 import { TokenTimeline } from "./components/TokenTimeline";
+import { TokenSize } from "./components/TokenSize";
 import { validateToken, determineTokenType } from "./utils/token-validation";
 import { TokenType, DecodedToken, ValidationResult } from "./utils/types";
 
@@ -257,36 +258,42 @@ export function TokenInspector() {
       {decodedToken && (
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <div 
-                  className={`w-4 h-4 rounded-full mr-2 ${
-                    decodedToken.signature.valid ? 'bg-green-500' : 'bg-yellow-500'
-                  }`}
-                ></div>
-                <span>
-                  {decodedToken.signature.valid 
-                    ? 'Signature Valid' 
-                    : jwks 
-                      ? 'Signature Invalid' 
-                      : 'Signature Not Verified'
-                  }
-                </span>
-              </div>
-              <div className="text-sm font-medium">
-              Detected: {tokenType === "id_token" 
-              ? "OIDC ID Token" 
-              : tokenType === "access_token" 
-              ? decodedToken.header.typ === "at+jwt" || decodedToken.header.typ === "application/at+jwt"
-                ? "OAuth JWT Access Token (RFC9068)" 
-                    : "OAuth Access Token"
-                  : <span className="text-amber-500 font-medium">Unknown Token Type</span>
-              }
-              {tokenType === "unknown" && (
-              <span className="block text-xs text-gray-500 mt-1">
-                  Missing standard claims. Check browser console for details.
+            <div className="flex flex-col space-y-4 mb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div 
+                    className={`w-4 h-4 rounded-full mr-2 ${
+                      decodedToken.signature.valid ? 'bg-green-500' : 'bg-yellow-500'
+                    }`}
+                  ></div>
+                  <span>
+                    {decodedToken.signature.valid 
+                      ? 'Signature Valid' 
+                      : jwks 
+                        ? 'Signature Invalid' 
+                        : 'Signature Not Verified'
+                    }
                   </span>
-                )}
+                </div>
+                <div className="text-sm font-medium">
+                Detected: {tokenType === "id_token" 
+                ? "OIDC ID Token" 
+                : tokenType === "access_token" 
+                ? decodedToken.header.typ === "at+jwt" || decodedToken.header.typ === "application/at+jwt"
+                  ? "OAuth JWT Access Token (RFC9068)" 
+                      : "OAuth Access Token"
+                    : <span className="text-amber-500 font-medium">Unknown Token Type</span>
+                }
+                {tokenType === "unknown" && (
+                <span className="block text-xs text-gray-500 mt-1">
+                    Missing standard claims. Check browser console for details.
+                    </span>
+                  )}
+                </div>
+              </div>
+              
+              <div className="border-t pt-3">
+                <TokenSize token={decodedToken.raw} />
               </div>
             </div>
             
