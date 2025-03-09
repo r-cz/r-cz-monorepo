@@ -21,18 +21,6 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
     }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      setToken(content.trim());
-    };
-    reader.readAsText(file);
-  };
-
   const handleClear = () => {
     setToken("");
   };
@@ -61,21 +49,6 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
             onClick={loadExampleToken}
           >
             Example
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            asChild
-          >
-            <label className="cursor-pointer">
-              Upload
-              <input
-                type="file"
-                className="hidden"
-                accept=".txt,.jwt,.json"
-                onChange={handleFileUpload}
-              />
-            </label>
           </Button>
           <Button 
             variant="destructive" 
