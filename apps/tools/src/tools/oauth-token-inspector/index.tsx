@@ -259,7 +259,7 @@ export function TokenInspector() {
         <Card>
           <CardContent className="p-6">
             <div className="flex flex-col space-y-4 mb-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center">
                   <div 
                     className={`w-4 h-4 rounded-full mr-2 ${
@@ -304,11 +304,11 @@ export function TokenInspector() {
             )}
 
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4">
-                <TabsTrigger value="header">Header</TabsTrigger>
-                <TabsTrigger value="payload">Payload</TabsTrigger>
-                <TabsTrigger value="signature">Signature</TabsTrigger>
-                <TabsTrigger value="timeline">Timeline</TabsTrigger>
+              <TabsList className="mb-4 w-full flex overflow-x-auto max-w-full">
+                <TabsTrigger value="header" className="flex-1 min-w-fit">Header</TabsTrigger>
+                <TabsTrigger value="payload" className="flex-1 min-w-fit">Payload</TabsTrigger>
+                <TabsTrigger value="signature" className="flex-1 min-w-fit">Signature</TabsTrigger>
+                <TabsTrigger value="timeline" className="flex-1 min-w-fit">Timeline</TabsTrigger>
               </TabsList>
               
               <TabsContent value="header">

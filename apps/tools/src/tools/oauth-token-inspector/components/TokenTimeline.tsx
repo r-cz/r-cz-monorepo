@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Card, Progress } from "@r-cz/ui";
-// Using styled divs instead of components
 
 interface TokenTimelineProps {
   payload: any;
@@ -72,9 +71,20 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
     }
   };
   
+  // Format date more concisely for mobile
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+  
   return (
     <div className="space-y-6">
-      <div className="relative pt-12 pb-4">
+      <div className="relative pt-16 md:pt-12 pb-8 md:pb-4">
         {/* Timeline bar */}
         <div className="relative">
           <Progress 
@@ -82,44 +92,29 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
             className={`${now > expiration ? 'bg-red-500' : ''}`}
           />
 
-          
-          {/* Start label */}
-          <div 
-            className="absolute text-xs font-mono whitespace-nowrap"
-            style={{ 
-              left: '0%',
-              top: '-2rem',
-              textAlign: 'left',
-              transform: 'none' 
-            }}
-          >
-            Issued: {new Date(issuedAt).toLocaleString()}
+          {/* Start label - stack on mobile, side-by-side on desktop */}
+          <div className="absolute left-0 top-[-3.5rem] md:top-[-2rem] text-xs font-mono text-left md:transform-none max-w-[150px] md:max-w-none break-words md:whitespace-nowrap">
+            <div className="font-semibold">Issued:</div>
+            <div>{formatDate(issuedAt)}</div>
           </div>
           
-          {/* End label */}
-          <div 
-            className="absolute text-xs font-mono whitespace-nowrap"
-            style={{ 
-              right: '0%',
-              top: '-2rem',
-              textAlign: 'right',
-              transform: 'none'
-            }}
-          >
-            Expires: {new Date(expiration).toLocaleString()}
+          {/* End label - stack on mobile, side-by-side on desktop */}
+          <div className="absolute right-0 top-[-3.5rem] md:top-[-2rem] text-xs font-mono text-right md:transform-none max-w-[150px] md:max-w-none break-words md:whitespace-nowrap">
+            <div className="font-semibold">Expires:</div>
+            <div>{formatDate(expiration)}</div>
           </div>
         </div>
       </div>
       
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
           <div className="p-3">
             <h4 className="text-sm font-medium">Token Age</h4>
             <p className="text-2xl font-bold">
               {formatTimeDiff(issuedAt, now)}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {new Date(issuedAt).toLocaleString()}
+            <p className="text-xs text-muted-foreground truncate" title={new Date(issuedAt).toLocaleString()}>
+              {formatDate(issuedAt)}
             </p>
           </div>
         </div>
@@ -132,8 +127,8 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
                 ? 'Expired' 
                 : formatTimeDiff(now, expiration)}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {new Date(expiration).toLocaleString()}
+            <p className="text-xs text-muted-foreground truncate" title={new Date(expiration).toLocaleString()}>
+              {formatDate(expiration)}
             </p>
           </div>
         </div>
@@ -145,8 +140,8 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
               <p className="text-lg font-bold">
                 {formatTimeDiff(authTime, now)} ago
               </p>
-              <p className="text-xs text-muted-foreground">
-                {new Date(authTime).toLocaleString()}
+              <p className="text-xs text-muted-foreground truncate" title={new Date(authTime).toLocaleString()}>
+                {formatDate(authTime)}
               </p>
             </div>
           </div>
@@ -169,7 +164,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
       {payload.jti && (
         <div className="bg-blue-500/10 text-blue-700 p-3 rounded-md">
           <p className="text-sm font-medium mb-1">
-            JWT ID: <span className="font-mono">{payload.jti}</span>
+            JWT ID: <span className="font-mono break-all">{payload.jti}</span>
           </p>
           <p className="text-xs">
             This token has a unique identifier. JWT IDs are particularly important for OAuth access tokens.
@@ -181,7 +176,7 @@ export function TokenTimeline({ payload }: TokenTimelineProps) {
       {payload.sid && (
         <div className="bg-blue-500/10 text-blue-700 p-3 rounded-md">
           <p className="text-sm font-medium mb-1">
-            Session ID: <span className="font-mono">{payload.sid}</span>
+            Session ID: <span className="font-mono break-all">{payload.sid}</span>
           </p>
           <p className="text-xs">
             This token is associated with a specific authentication session.

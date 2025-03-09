@@ -2,9 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@r-cz/ui";
-// Use plain input and textarea elements with shadcn-inspired styling since we don't have the components
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@r-cz/ui";
-// Using styled divs for alerts
 
 interface JwksResolverProps {
   issuerUrl: string;
@@ -118,7 +116,7 @@ export function JwksResolver({
   return (
     <div className="space-y-4">
       <Tabs value={jwksMode} onValueChange={(value) => setJwksMode(value as "automatic" | "manual")}>
-        <TabsList className="grid grid-cols-2 w-full max-w-xs">
+        <TabsList className="grid grid-cols-2 w-full">
           <TabsTrigger value="automatic">Automatic</TabsTrigger>
           <TabsTrigger value="manual">Manual Entry</TabsTrigger>
         </TabsList>
@@ -137,6 +135,7 @@ export function JwksResolver({
             <Button 
               onClick={fetchJwks}
               disabled={isLoading || !issuerUrl}
+              className="w-full sm:w-auto"
             >
               {isLoading ? 'Fetching...' : 'Fetch JWKS'}
             </Button>
@@ -144,7 +143,7 @@ export function JwksResolver({
           
           {error && (
             <div className="relative w-full rounded-lg border p-4 bg-amber-500/10 text-amber-700">
-              <p className="font-medium">{error.message}</p>
+              <p className="font-medium break-words">{error.message}</p>
               {error.isCors && (
                 <div className="mt-2">
                   <p className="text-sm">Try fetching the JWKS manually with:</p>
@@ -173,6 +172,7 @@ export function JwksResolver({
             <Button 
               onClick={handleManualJwksSubmit}
               disabled={!manualJwks}
+              className="w-full sm:w-auto"
             >
               Use This JWKS
             </Button>
@@ -181,7 +181,7 @@ export function JwksResolver({
           <div className="text-xs text-muted-foreground mt-1">
             <p>JWKS should be a JSON object with a "keys" array containing JWK objects.</p>
             <p>Example format:</p>
-            <pre className="bg-muted mt-1 p-2 rounded-md text-xs overflow-x-auto">
+            <pre className="bg-muted mt-1 p-2 rounded-md text-xs overflow-x-auto whitespace-pre-wrap sm:whitespace-pre">
 {`{
   "keys": [
     {

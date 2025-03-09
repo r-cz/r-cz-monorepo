@@ -31,11 +31,11 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
         <label htmlFor="token-input" className="block text-sm font-medium">
           OAuth/OIDC Token
         </label>
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2">
           <Button 
             variant="outline" 
             size="sm" 
@@ -80,6 +80,7 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
         <Button 
           onClick={onDecode}
           disabled={!token}
+          className="w-full sm:w-auto"
         >
           Inspect Token
         </Button>
