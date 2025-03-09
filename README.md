@@ -65,7 +65,7 @@ bun --cwd apps/tools dev
 To build all applications:
 
 ```bash
-bun build
+bun run build
 ```
 
 To build a specific application:
