@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@r-cz/ui";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@r-cz/ui";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@r-cz/ui";
 
 interface JwksResolverProps {
   issuerUrl: string;
@@ -161,7 +162,35 @@ export function JwksResolver({
         
         <TabsContent value="manual" className="space-y-4 mt-4">
           <div className="space-y-2">
-            <label htmlFor="manual-jwks" className="block text-sm font-medium pb-2">Paste JWKS JSON:</label>
+            <div className="flex items-center gap-2 pb-2">
+              <label htmlFor="manual-jwks" className="block text-sm font-medium">Paste JWKS JSON:</label>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-muted text-muted-foreground text-xs font-medium cursor-help" aria-label="JWKS format info">?</span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="max-w-xs">
+                      <p>JWKS should be a JSON object with a "keys" array containing JWK objects.</p>
+                      <p className="mt-2 text-xs">Example format:</p>
+                      <pre className="bg-muted p-2 rounded mt-1 overflow-x-auto text-xs">
+{`{
+  "keys": [
+    {
+      "kty": "RSA",
+      "kid": "KEY_ID",
+      "use": "sig",
+      "n": "BASE64_MODULUS",
+      "e": "BASE64_EXPONENT"
+    }
+  ]
+}`}
+                      </pre>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             <textarea
               id="manual-jwks"
               value={manualJwks}
@@ -178,23 +207,7 @@ export function JwksResolver({
             </Button>
           </div>
           
-          <div className="text-xs text-muted-foreground mt-1">
-            <p>JWKS should be a JSON object with a "keys" array containing JWK objects.</p>
-            <p>Example format:</p>
-            <pre className="bg-muted mt-1 p-2 rounded-md text-xs overflow-x-auto whitespace-pre-wrap sm:whitespace-pre">
-{`{
-  "keys": [
-    {
-      "kty": "RSA",
-      "kid": "KEY_ID",
-      "use": "sig",
-      "n": "BASE64_MODULUS",
-      "e": "BASE64_EXPONENT"
-    }
-  ]
-}`}
-            </pre>
-          </div>
+
         </TabsContent>
       </Tabs>
     </div>
