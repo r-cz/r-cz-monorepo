@@ -78,25 +78,25 @@ export function DiagramActions({
   };
 
   return (
-    <div className={cn("flex gap-2", className)}>
+    <div className={cn("flex flex-col sm:flex-row gap-2", className)}>
       <Button
         variant="outline"
         size="sm"
-        className="gap-1"
+        className="gap-1 w-full sm:w-auto"
         onClick={copySvg}
       >
         {copied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
-        Copy SVG Code
+        <span className="whitespace-nowrap">Copy SVG</span>
       </Button>
       
       <Button
         variant="outline"
         size="sm"
-        className="gap-1"
+        className="gap-1 w-full sm:w-auto"
         onClick={downloadSvg}
       >
         <DownloadIcon className="h-4 w-4" />
-        Download SVG
+        <span className="whitespace-nowrap">Download SVG</span>
       </Button>
     </div>
   );
