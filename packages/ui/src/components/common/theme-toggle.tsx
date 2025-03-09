@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@r-cz/ui";
+} from "../../";
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();

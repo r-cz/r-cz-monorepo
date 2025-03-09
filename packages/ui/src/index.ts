@@ -17,5 +17,8 @@ export * from "./components/ui/code-block";
 // Export layout components
 export * from "./components/layout/theme-provider";
 
+// Export common components
+export * from "./components/common";
+
 // Export utils
 export * from "./lib/utils";
