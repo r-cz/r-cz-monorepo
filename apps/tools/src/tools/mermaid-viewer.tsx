@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { 
   Card, 
@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator
 } from "@r-cz/ui";
 import { ChevronDown } from "lucide-react";
+import { DiagramActions } from "@/components/diagram-actions";
 
 // Import MermaidClient dynamically with ssr disabled
 const MermaidClient = dynamic(
@@ -64,18 +65,6 @@ const diagramExamples = {
   Animal <|-- Dog
   Animal <|-- Cat`
   },
-  gantt: {
-    label: "Gantt Chart",
-    code: `gantt
-  title A Gantt Diagram
-  dateFormat YYYY-MM-DD
-  section Section
-  A task         :a1, 2023-01-01, 30d
-  Another task   :after a1, 20d
-  section Another
-  Task in sec    :2023-01-12, 12d
-  Another task   :24d`
-  },
   erDiagram: {
     label: "Entity Relationship",
     code: `erDiagram
@@ -97,6 +86,7 @@ export function MermaidViewer() {
   const [code, setCode] = useState(diagramExamples.flowchart.code);
   const [currentExample, setCurrentExample] = useState("flowchart");
   const [error, setError] = useState<string | null>(null);
+  const diagramRef = useRef<HTMLDivElement>(null);
   
   const handleError = (message: string) => {
     setError(message || null);
@@ -154,20 +144,31 @@ export function MermaidViewer() {
         
         <Card>
           <CardContent className="p-6">
-            <label className="block text-sm font-medium mb-2">
-              Preview
-            </label>
-            {error ? (
-              <div className="min-h-[300px] bg-destructive/10 text-destructive p-4 rounded-md overflow-auto">
-                <p className="font-bold">Error:</p>
-                <pre className="whitespace-pre-wrap">{error}</pre>
-              </div>
-            ) : (
-              <MermaidClient 
-                code={code}
-                onError={handleError}
-              />
-            )}
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium">
+                Preview
+              </label>
+              {!error && (
+                <DiagramActions 
+                  containerRef={diagramRef}
+                  className="h-8"
+                />
+              )}
+            </div>
+            <div ref={diagramRef} className="w-full h-full min-h-[300px]">
+              {!error && (
+                <MermaidClient 
+                  code={code}
+                  onError={handleError}
+                />
+              )}
+              {error && (
+                <div className="min-h-[300px] bg-destructive/10 text-destructive p-4 rounded-md overflow-auto">
+                  <p className="font-bold">Error:</p>
+                  <pre className="whitespace-pre-wrap">{error}</pre>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>

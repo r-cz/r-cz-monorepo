@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import mermaid from "mermaid";
 
 interface MermaidClientProps {
@@ -9,8 +9,8 @@ interface MermaidClientProps {
 }
 
 export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) => {
-  const diagramRef = useRef<HTMLDivElement>(null);
   const [renderAttempt, setRenderAttempt] = useState(0);
+  const [diagramHtml, setDiagramHtml] = useState<string>('');
 
   useEffect(() => {
     // Reset error state on new code
@@ -25,12 +25,7 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
   }, [code, renderAttempt]);
 
   const renderDiagram = async () => {
-    if (!diagramRef.current) return;
-    
     try {
-      // Clear previous content
-      diagramRef.current.innerHTML = '';
-      
       // Initialize with sensible defaults and current theme
       mermaid.initialize({
         startOnLoad: false,
@@ -58,12 +53,31 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
       const id = `mermaid-diagram-${Date.now()}`;
       
       try {
-        // Use the new render API pattern
-        const { svg } = await mermaid.render(id, code, diagramRef.current);
+        // Use the API that returns SVG as a string
+        const { svg } = await mermaid.render(id, code);
         
-        if (diagramRef.current) {
-          diagramRef.current.innerHTML = svg;
+        // Ensure the SVG has proper XML attributes
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svg, "image/svg+xml");
+        const svgElement = svgDoc.documentElement;
+        
+        if (!svgElement.getAttribute('xmlns')) {
+          svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         }
+        
+        // Ensure it has width and height
+        if (!svgElement.hasAttribute('width')) {
+          svgElement.setAttribute('width', '100%');
+        }
+        if (!svgElement.hasAttribute('height')) {
+          svgElement.setAttribute('height', '100%');
+        }
+        
+        // Convert back to string
+        const serializer = new XMLSerializer();
+        const modifiedSvg = serializer.serializeToString(svgElement);
+        
+        setDiagramHtml(modifiedSvg);
       } catch (err: any) {
         // Try one more time with a clean element
         if (renderAttempt < 1) {
@@ -80,8 +94,8 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
 
   return (
     <div 
-      className="min-h-[300px] w-full bg-background rounded-md border border-input p-4 overflow-auto flex items-center justify-center"
-      ref={diagramRef}
+      className="min-h-[300px] w-full h-full bg-background rounded-md border border-input p-4 overflow-auto flex items-center justify-center"
+      dangerouslySetInnerHTML={{ __html: diagramHtml }}
     />
   );
 };
