@@ -24,7 +24,8 @@
     "clean:dry": "bun ./scripts/clean.js --dry-run",
     "clean:force": "bun ./scripts/clean.js --force",
     "clean:test": "bun ./scripts/clean.js --test-only --force",
-    "clean:test:dry": "bun ./scripts/clean.js --test-only --dry-run"
+    "clean:test:dry": "bun ./scripts/clean.js --test-only --dry-run",
+    "update-shared-assets": "node ./scripts/update-shared-assets.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.1",

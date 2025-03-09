@@ -5,7 +5,9 @@
   "files": [
     "eslint-next.js",
     "tailwind.config.js",
-    "tsconfig.json"
+    "tsconfig.json",
+    "postcss.config.js",
+    "next.config.js"
   ],
   "scripts": {
     "build": "echo 'No build needed for config package'"

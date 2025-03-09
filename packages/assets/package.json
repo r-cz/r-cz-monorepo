@@ -1,0 +1,12 @@
+{
+  "name": "@r-cz/assets",
+  "version": "0.0.1",
+  "private": true,
+  "files": [
+    "icons/**/*",
+    "manifest/**/*"
+  ],
+  "scripts": {
+    "build": "echo 'No build needed for assets package'"
+  }
+}
