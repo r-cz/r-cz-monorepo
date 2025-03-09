@@ -1,5 +1,5 @@
 // Export styles
-import './styles/prism.css';
+import './styles/index.css';
 
 // Export components
 export * from "./components/ui/button";
