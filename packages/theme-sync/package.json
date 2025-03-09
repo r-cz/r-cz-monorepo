@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "next-themes": "^0.2.1",
-    "react": "^18.2.0"
+    "react": "^19.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
