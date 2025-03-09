@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@r-cz/ui";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@r-cz/ui";
 
 interface JwksResolverProps {
   onJwksResolved: (jwks: any) => void;
@@ -116,7 +117,19 @@ export function JwksResolver({ onJwksResolved }: JwksResolverProps) {
         </>
       ) : (
         <div className="space-y-2">
-          <label className="block text-sm font-medium">Paste JWKS JSON:</label>
+          <div className="flex items-center space-x-2">
+            <label className="block text-sm font-medium">Paste JWKS JSON:</label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-gray-200 text-gray-600 text-xs font-medium cursor-help" aria-label="JWKS format info">?</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>JWKS should be a JSON object with a "keys" array containing JWK objects.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
           <textarea
             value={manualJwks}
             onChange={(e) => setManualJwks(e.target.value)}
@@ -132,7 +145,6 @@ export function JwksResolver({ onJwksResolved }: JwksResolverProps) {
           </Button>
           
           <div className="text-xs text-gray-500 mt-1">
-            <p>JWKS should be a JSON object with a "keys" array containing JWK objects.</p>
             <p>Example format:</p>
             <pre className="p-2 bg-gray-100 rounded mt-1 overflow-x-auto">
 {`{
