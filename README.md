@@ -21,9 +21,13 @@ r-cz-monorepo/
 ├── apps/
 │   ├── main/           # Personal website (ryancruz.com)
 │   └── tools/          # Developer tools (tools.ryancruz.com)
-└── packages/
-    ├── ui/             # Shared UI components (shadcn/ui)
-    └── config/         # Shared configuration (TypeScript, Tailwind, ESLint)
+├── packages/
+│   ├── assets/         # Shared static assets (icons, manifest files)
+│   ├── config/         # Shared configuration (TypeScript, Tailwind, ESLint, Next.js)
+│   ├── theme-sync/     # Theme persistence and synchronization
+│   └── ui/             # Shared UI components and styles
+└── docs/
+    └── monorepo-optimizations.md  # Documentation on code sharing strategies
 ```
 
 ## Local Development
@@ -112,17 +116,73 @@ This project is deployed to Cloudflare Pages using Cloudflare's GitHub integrati
 
 Deployment is handled via Cloudflare Pages with build watch paths configured in the Cloudflare dashboard.
 
-## Adding a New UI Component
+## Shared Code Strategy
+
+This monorepo uses several strategies to reduce duplication and promote code reuse:
+
+1. **Shared UI Components**: Common components like Header, Footer, and ThemeToggle are in `packages/ui`
+2. **Shared Configurations**: Base configs for Next.js, TypeScript, Tailwind, and PostCSS in `packages/config`
+3. **Shared Assets**: Common static assets like icons and manifest templates in `packages/assets`
+4. **Shared Styles**: Base CSS and theme variables in `packages/ui/src/styles`
+5. **Theme Synchronization**: Cross-app theme persistence in `packages/theme-sync`
+
+See [monorepo-optimizations.md](./docs/monorepo-optimizations.md) for detailed documentation.
+
+## Working with UI Components
+
+### Adding a New shadcn/ui Component
 
 1. Install the component using the shadcn-ui CLI
 2. Add the component to the `packages/ui/src/components/ui` directory
 3. Export the component from `packages/ui/src/index.ts`
+
+### Adding a New Shared Component
+
+1. Create the component in `packages/ui/src/components/common`
+2. Export it from `packages/ui/src/components/common/index.ts`
+3. Make sure it's exported from the main `packages/ui/src/index.ts`
+
+### Using Shared Assets
+
+Add new shared assets directly to the `packages/assets` directories:
+
+```bash
+# For icons, favicons, etc.
+packages/assets/icons/
+
+# For social preview images
+packages/assets/social/
+```
+
+To update shared assets from app directories (for migration purposes):
+
+```bash
+bun run update-shared-assets
+```
 
 ## Adding a New Tool
 
 1. Create a new tool component in `apps/tools/src/tools`
 2. Create a new route in `apps/tools/src/app`
 3. Add the tool to the list in `apps/tools/src/app/page.tsx`
+
+## Testing
+
+This project uses Playwright for end-to-end testing. The tests are defined in the `tests` directory.
+
+```bash
+# Run all tests
+bun run test
+
+# Run tests for specific site
+bun run test:main
+bun run test:tools
+
+# Run tests with UI mode for debugging
+bun run test:ui
+```
+
+See [tests/README.md](./tests/README.md) for more details on testing.
 
 ## License
 
