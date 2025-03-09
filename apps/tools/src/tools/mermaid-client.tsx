@@ -24,6 +24,18 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
     return () => clearTimeout(renderTimeout);
   }, [code, renderAttempt]);
 
+  useEffect(() => {
+    // Handle responsive behavior
+    const handleResize = () => {
+      if (renderAttempt <= 2) {
+        setRenderAttempt(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const renderDiagram = async () => {
     try {
       // Initialize with sensible defaults and current theme
@@ -46,6 +58,10 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
           diagramMarginX: 50,
           diagramMarginY: 30,
           actorMargin: 120,
+        },
+        // Add responsive configuration
+        gantt: {
+          fontSize: 14
         }
       });
       
@@ -73,6 +89,14 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
           svgElement.setAttribute('height', '100%');
         }
         
+        // Set viewBox if needed for better scaling
+        if (!svgElement.hasAttribute('viewBox') && svgElement.hasAttribute('width') && svgElement.hasAttribute('height')) {
+          const width = parseInt(svgElement.getAttribute('width') || '800');
+          const height = parseInt(svgElement.getAttribute('height') || '600');
+          svgElement.setAttribute('viewBox', `0 0 ${width} ${height}`);
+          svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        }
+        
         // Convert back to string
         const serializer = new XMLSerializer();
         const modifiedSvg = serializer.serializeToString(svgElement);
@@ -94,7 +118,7 @@ export const MermaidClient: React.FC<MermaidClientProps> = ({ code, onError }) =
 
   return (
     <div 
-      className="min-h-[300px] w-full h-full bg-background rounded-md border border-input p-4 overflow-auto flex items-center justify-center"
+      className="min-h-[300px] w-full h-full bg-background rounded-md border border-input p-2 sm:p-4 overflow-auto flex items-center justify-center"
       dangerouslySetInnerHTML={{ __html: diagramHtml }}
     />
   );

@@ -102,16 +102,16 @@ export function MermaidViewer() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2">
               <label className="block text-sm font-medium">
                 Diagram Code
               </label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="h-8">
+                  <Button variant="outline" className="h-8 w-full sm:w-auto">
                     Examples <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -144,18 +144,18 @@ export function MermaidViewer() {
         
         <Card>
           <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2">
               <label className="block text-sm font-medium">
                 Preview
               </label>
               {!error && (
                 <DiagramActions 
                   containerRef={diagramRef}
-                  className="h-8"
+                  className="w-full sm:w-auto"
                 />
               )}
             </div>
-            <div ref={diagramRef} className="w-full h-full min-h-[300px]">
+            <div ref={diagramRef} className="w-full h-full min-h-[300px] overflow-auto">
               {!error && (
                 <MermaidClient 
                   code={code}
@@ -165,7 +165,7 @@ export function MermaidViewer() {
               {error && (
                 <div className="min-h-[300px] bg-destructive/10 text-destructive p-4 rounded-md overflow-auto">
                   <p className="font-bold">Error:</p>
-                  <pre className="whitespace-pre-wrap">{error}</pre>
+                  <pre className="whitespace-pre-wrap break-words">{error}</pre>
                 </div>
               )}
             </div>
