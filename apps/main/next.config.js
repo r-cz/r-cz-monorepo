@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
+const baseConfig = require("@r-cz/config/next.config");
+
 const nextConfig = {
-  reactStrictMode: true,
-  transpilePackages: ["@r-cz/ui"],
-  output: 'export',
+  ...baseConfig,
+  // Add any app-specific overrides here
 };
 
 module.exports = nextConfig;
