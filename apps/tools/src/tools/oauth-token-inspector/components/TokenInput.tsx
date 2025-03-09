@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Button } from "@r-cz/ui";
+import { exampleTokens } from "../data/example-tokens";
 
 interface TokenInputProps {
   token: string;
@@ -20,20 +21,12 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
     }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      setToken(content.trim());
-    };
-    reader.readAsText(file);
-  };
-
   const handleClear = () => {
     setToken("");
+  };
+
+  const loadExampleToken = () => {
+    setToken(exampleTokens.standard);
   };
 
   return (
@@ -43,27 +36,27 @@ export function TokenInput({ token, setToken, onDecode }: TokenInputProps) {
           OAuth/OIDC Token
         </label>
         <div className="flex space-x-2">
-          <button
+          <Button 
+            variant="outline" 
+            size="sm" 
             onClick={handlePaste}
-            className="text-xs text-blue-600 hover:underline"
           >
-            Paste from Clipboard
-          </button>
-          <label className="text-xs text-blue-600 hover:underline cursor-pointer">
-            Upload File
-            <input
-              type="file"
-              className="hidden"
-              accept=".txt,.jwt,.json"
-              onChange={handleFileUpload}
-            />
-          </label>
-          <button
+            Paste
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadExampleToken}
+          >
+            Example
+          </Button>
+          <Button 
+            variant="destructive" 
+            size="sm" 
             onClick={handleClear}
-            className="text-xs text-red-600 hover:underline"
           >
             Clear
-          </button>
+          </Button>
         </div>
       </div>
       
