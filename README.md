@@ -1,4 +1,4 @@
-# R-CZ Monorepo
+# ryancruz.com Monorepo
 
 This monorepo contains two main applications:
 
